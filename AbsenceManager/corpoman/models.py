@@ -1,8 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-from .validators import validate_avatar
-from .utils import generate_matricule
+from .validators import *
+from .utils import *
 
 
 class Collaborateur(models.Model):
@@ -85,7 +84,7 @@ class EntiteJuridique(models.Model):
     ville = models.CharField(max_length=100, verbose_name="Ville")
     code_postal = models.CharField(max_length=20, verbose_name="Code postal")
     departement = models.CharField(max_length=100, verbose_name="Département")
-    pays = models.CharField(max_length=100, verbose_name="Pays")
+    pays = models.CharField(max_length=100, verbose_name="Pays",choices=country_choices())
 
     class Meta:
         verbose_name = "Entité Juridique"
@@ -138,7 +137,7 @@ class Emploi(models.Model):
         verbose_name_plural = "Emplois"
 
     def __str__(self):
-        return self.intitule
+        return f"{self.intitule} {self.niveau} - {self.entite_juridique}"
 
 class Contrat(models.Model):
     emploi_concerne = models.ForeignKey(
@@ -151,7 +150,8 @@ class Contrat(models.Model):
                              blank=True)
     date_entree_vigueur = models.DateField(verbose_name="Date d'entrée en vigueur du contrat")
     date_debut = models.DateField(verbose_name="Date de début")
-    date_fin = models.DateField(verbose_name="Date de fin")
+    date_fin = models.DateField(verbose_name="Date de fin",
+                                null=True)
     periode_dessai = models.BooleanField(verbose_name="Période d'essai")
 
     heures_contractuelles = models.ForeignKey(
@@ -168,8 +168,6 @@ class Contrat(models.Model):
         return self.objet
 
 class HeuresContractuelles(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     heures_par_jour = models.PositiveIntegerField(verbose_name="Heures par jour")
     lundi = models.BooleanField(default=True)
     mardi = models.BooleanField(default=True)
@@ -186,7 +184,14 @@ class HeuresContractuelles(models.Model):
         verbose_name_plural = "Heures contractuelles"
 
     def __str__(self):
-        return str(self.id)
+        jours_travail = "".join(["Lun " if self.lundi else "",
+                                "Mar " if self.mardi else "",
+                                "Mer " if self.mercredi else "",
+                                "Jeu " if self.jeudi else "",
+                                "Ven " if self.vendredi else "",
+                                "Sam " if self.samedi else "",
+                                "Dim " if self.dimanche else ""])
+        return f"{self.heures_par_jour} heures par jour, [{jours_travail}] - {self.max_heures_par_semaine} heures maximum par semaine"
 
 class PolitiqueAbsences(models.Model):
     nom = models.CharField(max_length=100, verbose_name="Nom")
@@ -345,8 +350,6 @@ class Configuration(models.Model):
         return f"{self.nom}, {self.maximum_eligible_days} jours ouvrés - {self.nombre_jours_reportes} jours reportables"
 
 class Seniority(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     # Ancienneté requise du collaborateur (en mois) entre 1 et 60
     seniority_required = models.IntegerField(
         verbose_name=("Ancienneté requise du collaborateur (en mois)"),

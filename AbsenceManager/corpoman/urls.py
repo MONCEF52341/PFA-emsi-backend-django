@@ -30,5 +30,5 @@ urlpatterns = [
     path('configuration/<int:pk>/', ConfigurationRetrieveUpdateDestroyAPIView.as_view(), name='configuration-retrieve-update-destroy'),
     path('seniority/', SeniorityListCreateAPIView.as_view(), name='seniority-list-create'),
     path('seniority/<int:pk>/', SeniorityRetrieveUpdateDestroyAPIView.as_view(), name='seniority-retrieve-update-destroy'),
-
+    path('dashboard/', dashboard, name='dashboard'),
 ]

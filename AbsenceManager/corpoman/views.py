@@ -1,3 +1,5 @@
+from django.shortcuts import render
+from django.urls import reverse
 from rest_framework import generics
 from .models import *
 from .serializers import *
@@ -113,3 +115,17 @@ class SeniorityListCreateAPIView(generics.ListCreateAPIView):
 class SeniorityRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Seniority.objects.all()
     serializer_class = SenioritySerializer
+
+
+def dashboard(request):
+    counts = []
+    models = [Collaborateur,Configuration,TypeAbsence,CompteurAbsences,DemandeAbsence,
+              PolitiqueAbsences,Contrat,Equipe,Emploi,HeuresContractuelles,EntiteJuridique,
+              Cycle,Seniority,LieuTravail]  # Ajoutez tous vos modèles ici
+
+    for model in models:
+        count = model.objects.count()
+        api_url = reverse(f'{model.__name__.lower()}-list-create')
+        counts.append({'name': model._meta.verbose_name_plural, 'count': count, 'api_url': api_url})
+
+    return render(request, 'dashboard.html', {'counts': counts})

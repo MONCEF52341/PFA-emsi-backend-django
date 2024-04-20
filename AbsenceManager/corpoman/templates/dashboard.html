@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div>
+        {% for item in counts %}
+            <div>
+                <h2>{{ item.name }}</h2>
+                <p>{{ item.count }}</p>
+                <a href="{{ item.api_url }}">Vue API</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
