@@ -13,62 +13,63 @@ class DemandeAbsenceSerializer(serializers.ModelSerializer):
         model = DemandeAbsence
         fields = '__all__'
 
-class equipeSerializer(serializers.ModelSerializer):
+class EquipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipe
         fields = '__all__'
 
-class entitejuridiqueSerializer(serializers.ModelSerializer):
+class EntiteJuridiqueSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntiteJuridique
         fields = '__all__'
 
-class lieutravailSerializer(serializers.ModelSerializer):
+class LieuTravailSerializer(serializers.ModelSerializer):
     class Meta:
         model = LieuTravail
         fields = '__all__'
 
-class emploiSerializer(serializers.ModelSerializer):
+class EmploiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Emploi
         fields = '__all__'
 
-class contratSerializer(serializers.ModelSerializer):
+class ContratSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contrat
         fields = '__all__'
 
-class heurescontractuellesSerializer(serializers.ModelSerializer):
+class HeuresContractuellesSerializer(serializers.ModelSerializer):
     class Meta:
         model = HeuresContractuelles
         fields = '__all__'
 
-class politiqueabsencesSerializer(serializers.ModelSerializer):
+class PolitiqueAbsencesSerializer(serializers.ModelSerializer):
     class Meta:
         model = PolitiqueAbsences
         fields = '__all__'
 
-class compteurabsencesSerializer(serializers.ModelSerializer):
+class CompteurAbsencesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompteurAbsences
         fields = '__all__'
 
-class typeabsenceSerializer(serializers.ModelSerializer):
+class TypeAbsenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TypeAbsence
         fields = '__all__'
 
-class cycleSerializer(serializers.ModelSerializer):
+class CycleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cycle
         fields = '__all__'
 
-class configurationSerializer(serializers.ModelSerializer):
+class ConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Configuration
         fields = '__all__'
 
-class senioritySerializer(serializers.ModelSerializer):
+class SenioritySerializer(serializers.ModelSerializer):
     class Meta:
         model = Seniority
         fields = '__all__'
+
