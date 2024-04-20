@@ -67,6 +67,7 @@ class DemandeAbsence(models.Model):
         else:
             return f"Demande d'absence pour {self.employe} à partir du {self.date_debut}"
 
+
 class Equipe(models.Model):
     nom = models.CharField(max_length=100, verbose_name="Nom")
     description = models.TextField(verbose_name="Description")
