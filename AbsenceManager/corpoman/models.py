@@ -47,7 +47,6 @@ class Collaborateur(models.Model):
     def __str__(self):
         return f"{self.prenom} {self.nom} ({self.matricule})"
 
-
 class DemandeAbsence(models.Model):
     employe = models.ForeignKey('Collaborateur', on_delete=models.CASCADE, verbose_name="Employé")
     approbateur = models.ForeignKey('Collaborateur', on_delete=models.SET_NULL, null=True, blank=True, related_name="approbateur", verbose_name="Approbateur")
@@ -67,7 +66,6 @@ class DemandeAbsence(models.Model):
         else:
             return f"Demande d'absence pour {self.employe} à partir du {self.date_debut}"
 
-
 class Equipe(models.Model):
     nom = models.CharField(max_length=100, verbose_name="Nom")
     description = models.TextField(verbose_name="Description")
@@ -80,10 +78,7 @@ class Equipe(models.Model):
     def __str__(self):
         return self.nom
 
-
 class EntiteJuridique(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     raison_sociale = models.CharField(max_length=255, verbose_name="Raison sociale (Nom)")
     matricule = models.CharField(max_length=100, verbose_name="Matricule")
     adresse_domiciliation = models.CharField(max_length=255, verbose_name="Adresse de Domiciliation")
@@ -97,12 +92,9 @@ class EntiteJuridique(models.Model):
         verbose_name_plural = "Entités Juridiques"
 
     def __str__(self):
-        return self.id
-
+        return self.raison_sociale
 
 class LieuTravail(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     TYPE_CHOICES = (
         ('OpenSpace', 'OpenSpace'),
         ('BureauPropre', 'Bureau Propre'),
@@ -120,12 +112,9 @@ class LieuTravail(models.Model):
         verbose_name_plural = "Lieux de travail"
 
     def __str__(self):
-        return self.id
-
+        return self.designation
 
 class Emploi(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     INTITULE_CHOICES = (
         ('Junior', 'Junior'),
         ('Moyen', 'Moyen'),
@@ -149,17 +138,17 @@ class Emploi(models.Model):
         verbose_name_plural = "Emplois"
 
     def __str__(self):
-        return self.id
-
+        return self.intitule
 
 class Contrat(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     emploi_concerne = models.ForeignKey(
         'Emploi',
         on_delete=models.CASCADE,
         verbose_name="Emploi concerné"
     )
+    objet = models.CharField(max_length=100,
+                             verbose_name="Objet du contrat",
+                             blank=True)
     date_entree_vigueur = models.DateField(verbose_name="Date d'entrée en vigueur du contrat")
     date_debut = models.DateField(verbose_name="Date de début")
     date_fin = models.DateField(verbose_name="Date de fin")
@@ -176,8 +165,7 @@ class Contrat(models.Model):
         verbose_name_plural = "Contrats"
 
     def __str__(self):
-        return self.id
-
+        return self.objet
 
 class HeuresContractuelles(models.Model):
     # ID
@@ -198,12 +186,9 @@ class HeuresContractuelles(models.Model):
         verbose_name_plural = "Heures contractuelles"
 
     def __str__(self):
-        return self.id
-
+        return str(self.id)
 
 class PolitiqueAbsences(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=100, verbose_name="Nom")
     description = models.TextField(verbose_name="Description")
     compteur_absences = models.ForeignKey(
@@ -217,12 +202,9 @@ class PolitiqueAbsences(models.Model):
         verbose_name_plural = "Politiques d'absences"
 
     def __str__(self):
-        return self.id
-
+        return self.nom
 
 class CompteurAbsences(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     NOM_CHOICES = (
         ('solde_fixe', 'Solde fixe'),
         ('heures_supplementaires', 'Heures supplémentaires'),
@@ -255,12 +237,9 @@ class CompteurAbsences(models.Model):
         verbose_name_plural = "Compteurs d'absences"
 
     def __str__(self):
-        return self.id
-
+        return str(self.nom)
 
 class TypeAbsence(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=100, verbose_name="Nom")
     description = models.TextField(verbose_name="Description")
     deduire_du_compteur = models.BooleanField(verbose_name="Déduire ce temps depuis le compteur")
@@ -277,12 +256,11 @@ class TypeAbsence(models.Model):
         verbose_name_plural = "Types d'absences"
 
     def __str__(self):
-        return self.id
-
+        deductions = "Déduit du compteur" if self.deduire_du_compteur else "Non Déduit du compteur"
+        approval = "et a besoin d'une approbation" if self.approbation_automatique else "et n'a besoin d'une approbation"
+        return f"{self.nom} - {deductions} {approval}"
 
 class Cycle(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     MOIS_CHOICES = (
         ('janvier', 'Janvier'),
         ('février', 'Février'),
@@ -295,8 +273,7 @@ class Cycle(models.Model):
         ('septembre', 'Septembre'),
         ('octobre', 'Octobre'),
         ('novembre', 'Novembre'),
-        ('décembre', 'Décembre'),
-        ('debut_contrat', 'Début du contrat'),
+        ('décembre', 'Décembre')
     )
 
     DUREE_CHOICES = (
@@ -322,13 +299,13 @@ class Cycle(models.Model):
         verbose_name_plural = "Cycles"
 
     def __str__(self):
-        return self.id
-
+        return f"Dure {self.duree} mois - Boucle tout les {self.mois_debut}"
 
 class Configuration(models.Model):
-    # ID
-    id = models.AutoField(primary_key=True)
     # Paramètres du compteur d'absences
+    nom = models.CharField(max_length=100,
+                           null=True,
+                           blank=True)  
     maximum_eligible_days = models.PositiveIntegerField(
         verbose_name="Nombre maximum de jours éligibles"
     )
@@ -340,10 +317,6 @@ class Configuration(models.Model):
         max_length=10,
         choices=MODE_CHOICES,
         verbose_name="Mode d'accumulation des jours d'absences"
-    )
-    absence_day_use = models.CharField(
-        max_length=100,
-        verbose_name="Utilisation des jours d'absences"
     )
     negative_balance = models.BooleanField(
         verbose_name="Autorisation de solde négatif"
@@ -357,12 +330,11 @@ class Configuration(models.Model):
         verbose_name="Date d'expiration des jours reportés (en mois)",
         validators=[MinValueValidator(1), MaxValueValidator(60)],
         null=True,
-        blank=True
     )
-    seniority = models.ForeignKey(
+    seniority = models.ManyToManyField(
         'Seniority',
-        on_delete=models.CASCADE,
-        verbose_name="Période d'ancienneté"
+        verbose_name="Période d'ancienneté",
+        blank=True
     )
 
     class Meta:
@@ -370,8 +342,7 @@ class Configuration(models.Model):
         verbose_name_plural = "Configurations"
 
     def __str__(self):
-        return self.id
-
+        return f"{self.nom}, {self.maximum_eligible_days} jours ouvrés - {self.nombre_jours_reportes} jours reportables"
 
 class Seniority(models.Model):
     # ID
@@ -396,4 +367,4 @@ class Seniority(models.Model):
         verbose_name_plural = "Anciennetés"
 
     def __str__(self):
-        return self.id
+        return f"{self.seniority_required} mois - {self.extra_leave_days} jours supplémentaires"
