@@ -8,7 +8,7 @@ class CollaborateurSerializer(serializers.ModelSerializer):
         model = Collaborateur
         fields = '__all__'
 
-class DemandeAbsenceSerializer(serializers.ModelField):
+class DemandeAbsenceSerializer(serializers.ModelSerializer):
     class Meta:
-        models = DemandeAbsence
+        model = DemandeAbsence
         fields = '__all__'
