@@ -1,14 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from .validators import validate_avatar
+from .utils import generate_matricule
 
 
 class Collaborateur(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True, blank=True)
     prenom = models.CharField(max_length=100, verbose_name="Prénom")
     nom = models.CharField(max_length=100, verbose_name="Nom")
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    matricule = models.CharField(max_length=100, verbose_name="Matricule")
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, validators=[validate_avatar])
+    matricule = models.CharField(max_length=11, unique=True, default=generate_matricule, verbose_name="Matricule")
     date_naissance = models.DateField(verbose_name="Date de naissance")
     GENRE_CHOICES = (
         ('M', 'Masculin'),
