@@ -1,10 +1,13 @@
-from django.db import models # type: ignore
-from django.core.validators import MinValueValidator, MaxValueValidator # type: ignore
+from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Collaborateur(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True, blank=True)
     prenom = models.CharField(max_length=100, verbose_name="Prénom")
     nom = models.CharField(max_length=100, verbose_name="Nom")
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     matricule = models.CharField(max_length=100, verbose_name="Matricule")
     date_naissance = models.DateField(verbose_name="Date de naissance")
     GENRE_CHOICES = (
