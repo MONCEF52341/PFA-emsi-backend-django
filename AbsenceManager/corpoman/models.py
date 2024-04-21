@@ -68,7 +68,7 @@ class DemandeAbsence(models.Model):
 class Equipe(models.Model):
     nom = models.CharField(max_length=100, verbose_name="Nom")
     description = models.TextField(verbose_name="Description")
-    responsable = models.ForeignKey('Collaborateur', on_delete=models.CASCADE, verbose_name="Manager/Responsable")
+    responsable = models.ForeignKey('Collaborateur', on_delete=models.CASCADE, verbose_name="Manager/Responsable",null=True)
 
     class Meta:
         verbose_name = "Équipe"
