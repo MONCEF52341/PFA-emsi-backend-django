@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des collaborateurs{% endblock %}
+
+{% block content %}
+
+<div class="navbarCollaborateurs">
+    <ul>
+        <li><a href="{% url 'liste_collaborateurs' %}" class="{% if request.path == '/collaborateurs/' %}active{% endif %}">Collaborateurs</a></li>
+        <li><a href="#" class="{% if 'equipes' in request.path %}active{% endif %}">Équipes</a></li>
+        <li><a href="#" class="{% if 'emplois' in request.path %}active{% endif %}">Emplois</a></li>
+    </ul>
+</div>
+
+
+    <h2>Liste des collaborateurs</h2>
+    <table class="collaborateurs-table">
+        <a  href="{% url 'ajouter_collaborateur'%}" class="button-link">Ajouter un collaborateur</a>
+        <thead>
+            <tr>
+                <th>Avatar</th>
+                <th><a href="?sort=nom">Nom</a></th>
+                <th><a href="?sort=prenom">Prénom</a></th>
+                <th><a href="?sort=emploi">Poste</a></th>
+                <th><a href="?sort=date_anciennete">Date d'entrée</a></th>
+                <th>Lieu de travail</th>
+                <th>Fonctions</th>
+            </tr>
+        </thead>        
+        <tbody>
+            {% for collaborateur in collaborateurs %}
+            <tr>
+                <td>{% if collaborateur.avatar %}
+                    <img src="{{ collaborateur.avatar.url }}" alt="Avatar" height="50px">
+                {% else %}
+                    Pas d'avatar
+                {% endif %}</td>
+                <td>{{ collaborateur.nom }}</td>
+                <td>{{ collaborateur.prenom }}</td>
+                <td>{{ collaborateur.emploi }}</td>
+                <td>{{ collaborateur.date_anciennete }}</td>
+                <td>{{ collaborateur.lieu_travail }}</td>
+                <td>
+                    <a href="{% url 'detail_collaborateur' pk=collaborateur.pk %}">Détail</a>
+                    <a href="{% url 'modifier_collaborateur' pk=collaborateur.pk %}">Modifier</a>
+                    <a href="{% url 'supprimer_collaborateur' pk=collaborateur.pk %}">Supprimer</a>                    
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

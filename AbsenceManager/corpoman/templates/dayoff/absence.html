@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+
+ <!-- Bouton pour ajouter une absence -->
+<div class="left-panel">
+    <h2>Absences</h2>
+    <button id="btn-ajouter-absence">Ajouter une absence</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- Formulaire ici -->
+            <form action="/ajouter_absence/" method="post">
+                <!-- Champs du formulaire ici -->
+                <!-- Exemple de champ -->
+                <label for="type_absence">Type d'absence:</label>
+                <input type="text" id="type_absence" name="type_absence">
+                <!-- Autres champs ici -->
+                <input type="submit" value="Ajouter">
+            </form>
+        </div>
+    </div>
+    <!-- Bouton visible uniquement pour les super utilisateurs -->
+    {% if user.is_superuser %}
+    <button id="btn-special">Bouton spécial</button>
+    {% endif %}
+
+    <!-- Tableau pour les absences -->
+    <table>
+        <thead>
+            <tr>
+                <th>Acquis</th>
+                <th>Solde</th>
+                <th>Pris</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Acquis</th>
+                <th>Solde</th>
+                <th>Pris</th>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Tableau pour les types d'absences -->
+    <h2>Types d'absences</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Du</th>
+                <th>Au</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Acquis</th>
+                <th>Solde</th>
+                <th>Pris</th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+    <div id="calendrier"></div>
+
+
+    
+    <!-- Script JavaScript pour gérer les fonctionnalités -->
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendrier');
+      
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'multiMonthYear,dayGridMonth,timeGridWeek'
+            },
+            initialView: 'multiMonthYear',
+            initialDate: '2024-01-01',
+            editable: true,
+            selectable: true,
+            dayMaxEvents: true, // allow "more" link when too many events
+            // multiMonthMaxColumns: 1, // guarantee single column
+            // showNonCurrentDates: true,
+            // fixedWeekCount: false,
+            // businessHours: true,
+            // weekends: false,
+            events: [
+              {
+                title: 'All Day Event',
+                start: '2023-01-01'
+              },
+              {
+                title: 'Long Event',
+                start: '2023-01-07',
+                end: '2023-01-10'
+              },
+              {
+                groupId: 999,
+                title: 'Repeating Event',
+                start: '2023-01-09T16:00:00'
+              },
+              {
+                groupId: 999,
+                title: 'Repeating Event',
+                start: '2023-01-16T16:00:00'
+              },
+              {
+                title: 'Conference',
+                start: '2023-01-11',
+                end: '2023-01-13'
+              },
+              {
+                title: 'Meeting',
+                start: '2023-01-12T10:30:00',
+                end: '2023-01-12T12:30:00'
+              },
+              {
+                title: 'Lunch',
+                start: '2023-01-12T12:00:00'
+              },
+              {
+                title: 'Meeting',
+                start: '2023-01-12T14:30:00'
+              },
+              {
+                title: 'Happy Hour',
+                start: '2023-01-12T17:30:00'
+              },
+              {
+                title: 'Dinner',
+                start: '2023-01-12T20:00:00'
+              },
+              {
+                title: 'Birthday Party',
+                start: '2023-01-13T07:00:00'
+              },
+              {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2023-01-28'
+              }
+            ]
+          });
+      
+          calendar.render();
+        });
+    var modal = document.getElementById("myModal");
+
+    // Récupérer le bouton pour ouvrir la boîte modale
+    var btn = document.getElementById("btn-ajouter-absence");
+
+    // Récupérer le span qui permet de fermer la boîte modale
+    var span = document.getElementsByClassName("close")[0];
+
+    var calendarEl = document.getElementById('calendrier');
+
+    // Lorsque l'utilisateur clique sur le bouton, ouvrir la boîte modale
+    btn.onclick = function() {
+        modal.style.display = "block";
+        calendrier.classList.add("hidden");
+    }
+
+    // Lorsque l'utilisateur clique sur <span> (x), fermer la boîte modale
+    span.onclick = function() {
+        modal.style.display = "none";
+        calendrier.classList.remove("hidden");
+    }
+
+    // Lorsque l'utilisateur clique en dehors de la boîte modale, la fermer
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            calendrier.classList.remove("hidden");
+        }
+    }
+      </script>
+{% endblock %}

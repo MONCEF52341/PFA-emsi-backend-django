@@ -1,37 +1,30 @@
 #L'objectif du fichier signal est de créer automatiquement un compte utilisateur dès qu'un 
 #collaborateur est créé, ou dès que ses informations de profil utilisateur (telles que le nom, le prénom ou l'e-mail) sont modifiées.
+#dés qu'il est supprimé le compte est désactivé
 
-import secrets
-import string
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,pre_delete
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Collaborateur
 
 
-def generate_password():
-    alphabet = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(secrets.choice(alphabet) for i in range(8))
-
-
 @receiver(post_save, sender=Collaborateur)
-def create_user_for_collaborateur(sender, instance, created, **kwargs):
+def create_or_update_user_for_collaborateur(sender, instance, created, **kwargs):
     if created:
         user = User.objects.create_user(
-            username=instance.prenom.lower() + instance.nom.lower(),
-            password=generate_password(),
-            email=instance.email_personnel, 
-            first_name=instance.prenom,
+            username= instance.nom.capitalize()[0] +"."+ instance.prenom.upper(),
+            password="Pa123456",
+            email=instance.email_professionnel, 
             last_name=instance.nom
         )
+        instance.user = user
+        instance.save()
 
-@receiver(post_save, sender=Collaborateur)
-def update_user_for_collaborateur(sender, instance, created, **kwargs):
-    if not created:
+@receiver(pre_delete, sender=Collaborateur)
+def disable_user_on_collaborateur_delete(sender, instance, **kwargs):
+    try:
         user = instance.user
-        user.username = instance.prenom.lower() + instance.nom.lower()
-        user.email = instance.email_personnel
-        user.first_name = instance.prenom
-        user.last_name = instance.nom
+        user.is_active = False
         user.save()
-
+    except User.DoesNotExist:
+        pass

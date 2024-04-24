@@ -4,6 +4,7 @@
 import random
 import string
 
+
 LISTE_PAYS = (
     ("Afghanistan (+93)", "Afghanistan (+93)"),
     ("Afrique du Sud (+27)", "Afrique du Sud (+27)"),

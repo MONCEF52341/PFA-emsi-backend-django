@@ -1,14 +1,16 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
 from .validators import *
-from .utils import *
+from .utils import generate_matricule,country_choices
 
 
 class Collaborateur(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='collaborateur', editable=False,null=True)
     prenom = models.CharField(max_length=100, verbose_name="Prénom")
     nom = models.CharField(max_length=100, verbose_name="Nom")
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, validators=[validate_avatar])
-    matricule = models.CharField(max_length=11, unique=True, default=generate_matricule, verbose_name="Matricule")
+    matricule = models.CharField(max_length=11, unique=True, default=generate_matricule, verbose_name="Matricule",editable=False)
     date_naissance = models.DateField(verbose_name="Date de naissance")
     GENRE_CHOICES = (
         ('M', 'Masculin'),
@@ -37,7 +39,7 @@ class Collaborateur(models.Model):
     Equipe = models.ForeignKey('Equipe', on_delete=models.CASCADE, verbose_name="Équipe")
     contrat = models.ForeignKey('Contrat', on_delete=models.CASCADE, verbose_name="Contrat")
     emploi = models.ForeignKey('Emploi', on_delete=models.CASCADE, verbose_name="Emploi")
-    manager = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Manager")
+    manager = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Manager" , related_name='subordonnes')
 
     class Meta:
         verbose_name = "Collaborateur"
@@ -262,7 +264,7 @@ class TypeAbsence(models.Model):
 
     def __str__(self):
         deductions = "Déduit du compteur" if self.deduire_du_compteur else "Non Déduit du compteur"
-        approval = "et a besoin d'une approbation" if self.approbation_automatique else "et n'a besoin d'une approbation"
+        approval = "et n'a pas besoin d'une approbation" if self.approbation_automatique else "et a besoin d'une approbation"
         return f"{self.nom} - {deductions} {approval}"
 
 class Cycle(models.Model):

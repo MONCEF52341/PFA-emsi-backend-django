@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render,redirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required,user_passes_test
 from rest_framework import generics
+from .forms import *
 from .models import *
 from .serializers import *
 
@@ -116,7 +118,7 @@ class SeniorityRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
     queryset = Seniority.objects.all()
     serializer_class = SenioritySerializer
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def dashboard(request):
     counts = []
     models = [Collaborateur,Configuration,TypeAbsence,CompteurAbsences,DemandeAbsence,
@@ -129,3 +131,80 @@ def dashboard(request):
         counts.append({'name': model._meta.verbose_name_plural, 'count': count, 'api_url': api_url})
 
     return render(request, 'dashboard.html', {'counts': counts})
+
+@login_required
+def accueil(request):
+    return render(request, 'home.html')
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def collaborateurs_list(request):
+    collaborateurs = Collaborateur.objects.all()
+
+    # Récupérer le paramètre de tri de l'URL
+    sort_by = request.GET.get('sort')
+
+    # Récupérer l'état de tri actuel de la session
+    sort_order = request.session.get('sort_order', 'asc')
+
+    # Basculer entre l'ordre ascendant et descendant si le même en-tête est cliqué à nouveau
+    if sort_by == request.session.get('sort_by') and sort_order == 'asc':
+        sort_order = 'desc'
+    else:
+        sort_order = 'asc'
+
+    # Enregistrer le nouvel état de tri dans la session
+    request.session['sort_by'] = sort_by
+    request.session['sort_order'] = sort_order
+
+    # Trier les collaborateurs en fonction du paramètre de tri et de l'ordre
+    if sort_by == 'nom':
+        collaborateurs = collaborateurs.order_by('-nom' if sort_order == 'desc' else 'nom')
+    elif sort_by == 'prenom':
+        collaborateurs = collaborateurs.order_by('-prenom' if sort_order == 'desc' else 'prenom')
+    elif sort_by == 'emploi':
+        collaborateurs = collaborateurs.order_by('-emploi' if sort_order == 'desc' else 'emploi')
+    elif sort_by == 'date_anciennete':
+        collaborateurs = collaborateurs.order_by('-date_anciennete' if sort_order == 'desc' else 'date_anciennete')
+
+    return render(request, 'collaborateurs/collaborateurs.html', {'collaborateurs': collaborateurs})
+
+@user_passes_test(lambda u: u.is_superuser)
+def ajouter_collaborateur(request):
+    if request.method == 'POST':
+        form = CollaborateurForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('liste_collaborateurs')
+    else:
+        form = CollaborateurForm()
+    return render(request, 'collaborateurs/ajouter_collaborateur.html', {'form': form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def modifier_collaborateur(request, pk):
+    collaborateur = get_object_or_404(Collaborateur, pk=pk)
+    if request.method == 'POST':
+        form = CollaborateurForm(request.POST, instance=collaborateur)
+        if form.is_valid():
+            form.save()
+            return redirect('liste_collaborateurs')
+    else:
+        form = CollaborateurForm(instance=collaborateur)
+    return render(request, 'collaborateurs/modifier_collaborateur.html', {'form': form})
+
+@user_passes_test(lambda u: u.is_superuser)
+def supprimer_collaborateur(request, pk):
+    collaborateur = get_object_or_404(Collaborateur, pk=pk)
+    if request.method == 'POST':
+        collaborateur.delete()
+        return redirect('liste_collaborateurs')
+    return render(request, 'collaborateurs/supprimer_collaborateur.html', {'collaborateur': collaborateur})
+
+@user_passes_test(lambda u: u.is_superuser)
+def detail_collaborateur(request, pk):
+    collaborateur = get_object_or_404(Collaborateur, pk=pk)
+    return render(request, 'collaborateurs/detail_collaborateur.html', {'collaborateur': collaborateur})
+
+def dayoff(request):
+    return render(request, 'dayoff/absence.html')
