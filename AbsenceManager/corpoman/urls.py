@@ -39,7 +39,6 @@ urlpatterns = [
     path('ajouter-collaborateur/', ajouter_collaborateur, name='ajouter_collaborateur'),
     path('modifier-collaborateur/<int:pk>/', modifier_collaborateur, name='modifier_collaborateur'),
     path('supprimer-collaborateur/<int:pk>/', supprimer_collaborateur, name='supprimer_collaborateur'),
-    path('detail-collaborateur/<int:pk>/', detail_collaborateur, name='detail_collaborateur'),
     path('dayoff/', dayoff, name='dayoff'),
 ]
 

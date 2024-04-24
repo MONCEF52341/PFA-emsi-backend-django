@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render,redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required,user_passes_test
 from rest_framework import generics
 from .forms import *
@@ -197,6 +198,14 @@ def modifier_collaborateur(request, pk):
 def supprimer_collaborateur(request, pk):
     collaborateur = get_object_or_404(Collaborateur, pk=pk)
     if request.method == 'POST':
+        # Créer une instance de ArchiveCollaborateur et y copier les données du collaborateur
+        archive_collaborateur = ArchiveCollaborateur.objects.create(
+            prenom=collaborateur.prenom,
+            nom=collaborateur.nom,
+            # Copier les autres champs au besoin
+            date_archivage=timezone.now()
+        )
+        # Supprimer le collaborateur
         collaborateur.delete()
         return redirect('liste_collaborateurs')
     return render(request, 'collaborateurs/supprimer_collaborateur.html', {'collaborateur': collaborateur})

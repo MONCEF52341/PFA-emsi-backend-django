@@ -373,3 +373,13 @@ class Seniority(models.Model):
 
     def __str__(self):
         return f"{self.seniority_required} mois - {self.extra_leave_days} jours supplémentaires"
+
+class ArchiveCollaborateur(Collaborateur):
+    date_archivage = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Archive Collaborateur"
+        verbose_name_plural = "Archives Collaborateurs"
+
+    def __str__(self):
+        return f"{self.prenom} {self.nom} - Archivé le {self.date_archivage}"

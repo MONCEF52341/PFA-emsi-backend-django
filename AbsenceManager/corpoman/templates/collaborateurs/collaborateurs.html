@@ -41,9 +41,8 @@
                 <td>{{ collaborateur.date_anciennete }}</td>
                 <td>{{ collaborateur.lieu_travail }}</td>
                 <td>
-                    <a href="{% url 'detail_collaborateur' pk=collaborateur.pk %}">Détail</a>
-                    <a href="{% url 'modifier_collaborateur' pk=collaborateur.pk %}">Modifier</a>
-                    <a href="{% url 'supprimer_collaborateur' pk=collaborateur.pk %}">Supprimer</a>                    
+                    <a href="{% url 'modifier_collaborateur' pk=collaborateur.pk %}">Détails</a>
+                    <a href="{% url 'supprimer_collaborateur' pk=collaborateur.pk %}">Cloturer le contrat</a>                    
                 </td>
             </tr>
             {% endfor %}
