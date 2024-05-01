@@ -209,7 +209,7 @@ class PolitiqueAbsences(models.Model):
         verbose_name_plural = "Politiques d'absences"
 
     def __str__(self):
-        return self.nom
+        return f"{self.nom} [{self.compteur_absences}]"
 
 class CompteurAbsences(models.Model):
     NOM_CHOICES = (
@@ -376,7 +376,6 @@ class Seniority(models.Model):
 
 class ArchiveCollaborateur(Collaborateur):
     date_archivage = models.DateTimeField(auto_now_add=True)
-
     class Meta:
         verbose_name = "Archive Collaborateur"
         verbose_name_plural = "Archives Collaborateurs"

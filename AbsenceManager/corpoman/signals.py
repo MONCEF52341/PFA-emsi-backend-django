@@ -24,7 +24,8 @@ def create_or_update_user_for_collaborateur(sender, instance, created, **kwargs)
 def disable_user_on_collaborateur_delete(sender, instance, **kwargs):
     try:
         user = instance.user
-        user.is_active = False
-        user.save()
+        if user:
+            user.is_active = False
+            user.save()
     except User.DoesNotExist:
         pass

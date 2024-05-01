@@ -137,10 +137,14 @@ def dashboard(request):
 def accueil(request):
     return render(request, 'home.html')
 
+@login_required
+def dayoff(request):
+    return render(request, 'dayoff/absence.html')
 
 @user_passes_test(lambda u: u.is_superuser)
 def collaborateurs_list(request):
-    collaborateurs = Collaborateur.objects.all()
+    ids_collaborateurs_archives = ArchiveCollaborateur.objects.values_list('id', flat=True)
+    collaborateurs = Collaborateur.objects.exclude(id__in=ids_collaborateurs_archives)
 
     # Récupérer le paramètre de tri de l'URL
     sort_by = request.GET.get('sort')
@@ -202,7 +206,14 @@ def supprimer_collaborateur(request, pk):
         archive_collaborateur = ArchiveCollaborateur.objects.create(
             prenom=collaborateur.prenom,
             nom=collaborateur.nom,
-            # Copier les autres champs au besoin
+            date_naissance=collaborateur.date_naissance,
+            date_anciennete=collaborateur.date_anciennete,
+            contrat=collaborateur.contrat,
+            emploi=collaborateur.emploi,
+            entite_juridique=collaborateur.entite_juridique,
+            Equipe=collaborateur.Equipe,
+            lieu_travail=collaborateur.lieu_travail,
+            politique_conges=collaborateur.politique_conges,
             date_archivage=timezone.now()
         )
         # Supprimer le collaborateur
@@ -210,10 +221,134 @@ def supprimer_collaborateur(request, pk):
         return redirect('liste_collaborateurs')
     return render(request, 'collaborateurs/supprimer_collaborateur.html', {'collaborateur': collaborateur})
 
-@user_passes_test(lambda u: u.is_superuser)
-def detail_collaborateur(request, pk):
-    collaborateur = get_object_or_404(Collaborateur, pk=pk)
-    return render(request, 'collaborateurs/detail_collaborateur.html', {'collaborateur': collaborateur})
+@login_required
+def equipes_list(request):
+    query = request.GET.get('query') # Récupérer le paramètre de recherche
+    equipes = Equipe.objects.all()
+    politiques_absences = PolitiqueAbsences.objects.all()
+    if query:
+        equipes = equipes.filter(nom__icontains=query)
 
-def dayoff(request):
-    return render(request, 'dayoff/absence.html')
+    return render(request, 'equipes/equipe.html', {'equipes': equipes, 'query': query, 'politiques_absences': politiques_absences})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def ajouter_equipe(request):
+    if request.method == 'POST':
+        form = EquipeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('equipes-list')
+    else:
+        form = EquipeForm()
+    return render(request, 'equipes/ajouter_equipe.html', {'form': form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def modifier_equipe(request, pk):
+    equipe = get_object_or_404(Equipe, pk=pk)
+    if request.method == 'POST':
+        form = EquipeForm(request.POST, instance=equipe)
+        if form.is_valid():
+            form.save()
+            return redirect('equipes-list')
+    else:
+        form = EquipeForm(instance=equipe)
+    return render(request, 'equipes/modifier_equipe.html', {'form': form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def supprimer_equipe(request, pk):
+    equipe = get_object_or_404(Equipe, pk=pk)
+    if request.method == 'POST':
+        equipe.delete()
+        return redirect('liste_collaborateurs')
+    return render(request, 'equipes/supprimer_equipe.html', {'equipe': equipe})
+
+@login_required
+def emplois_list(request):
+    niveau = request.GET.get('niveau')
+    query = request.GET.get('query')
+    emplois = Emploi.objects.all()
+    if query:
+        emplois = emplois.filter(intitule__icontains=query)
+    if niveau:
+        emplois = emplois.filter(niveau=niveau)
+
+    return render(request, 'emplois/emploi.html', {'emplois': emplois, 'niveau': niveau, 'query': query})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def ajouter_emploi(request):
+    if request.method == 'POST':
+        form = EmploiForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('emplois-list')
+    else:
+        form = EmploiForm()
+    return render(request, 'emplois/ajouter_emploi.html', {'form': form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def modifier_emploi(request, pk):
+    emploi = get_object_or_404(Emploi, pk=pk)
+    if request.method == 'POST':
+        form = EmploiForm(request.POST, instance=emploi)
+        if form.is_valid():
+            form.save()
+            return redirect('emplois-list')
+    else:
+        form = EmploiForm(instance=emploi)
+    return render(request, 'emplois/modifier_emploi.html', {'form': form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def supprimer_emploi(request, pk):
+    emploi = get_object_or_404(Emploi, pk=pk)
+    if request.method == 'POST':
+        emploi.delete()
+        return redirect('emplois-list')
+    return render(request, 'emplois/supprimer_emploi.html', {'emploi': emploi})
+
+def appliquer_politique_absences(request):
+    if request.method == 'POST':
+        politique_id = request.POST.get('politique-absences')
+        equipe_id = request.POST.get('equipe-id')
+        
+        # Récupérer l'équipe
+        equipe = Equipe.objects.get(pk=equipe_id)
+        
+        # Assigner la politique d'absences à l'équipe
+        politique_absences = PolitiqueAbsences.objects.get(pk=politique_id)
+
+        # Appliquer la politique d'absences à tous les employés de l'équipe
+        employes = Collaborateur.objects.filter(equipe=equipe)
+        for employe in employes:
+            employe.politique_absences = politique_absences
+            employe.save()
+        
+        return redirect('equipes-list')
+    else:
+        politiques_absences = PolitiqueAbsences.objects.all()
+        return render(request, 'popup-form.html', {'politiques_absences': politiques_absences})
+    
+def create_organization_chart(collaborateur):
+    ids_collaborateurs_archives = ArchiveCollaborateur.objects.values_list('id', flat=True)
+    chart = {'collaborateur': collaborateur, 'subordinates': []}
+    subordinates = Collaborateur.objects.filter(manager=collaborateur).exclude(id__in=ids_collaborateurs_archives)
+
+    for subordinate in subordinates:
+        chart['subordinates'].append(create_organization_chart(subordinate))
+
+    return chart
+
+def organization_chart(request):
+    ids_collaborateurs_archives = ArchiveCollaborateur.objects.values_list('id', flat=True)
+    top_level_collaborateurs = Collaborateur.objects.filter(manager=None).exclude(id__in=ids_collaborateurs_archives)
+
+    org_charts = []
+    for collaborateur in top_level_collaborateurs:
+        org_charts.append(create_organization_chart(collaborateur))
+
+    return render(request, 'organization_chart.html', {'org_charts': org_charts})

@@ -5,7 +5,9 @@ class CollaborateurForm(forms.ModelForm):
     class Meta:
         model = Collaborateur
         fields = '__all__'
-
+        widgets = {
+            'date_naissance': forms.DateInput(attrs={'type': 'date'})
+        }
 class EquipeForm(forms.ModelForm):
     class Meta:
         model = Equipe

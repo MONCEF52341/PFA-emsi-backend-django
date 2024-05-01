@@ -35,11 +35,25 @@ urlpatterns = [
     path('api/seniority/<int:pk>/', SeniorityRetrieveUpdateDestroyAPIView.as_view(), name='seniority-retrieve-update-destroy'),
     path('dashboard/', dashboard,name='dashboard'),
     path('home/', accueil, name='accueil'),
+
     path('collaborateurs/', collaborateurs_list, name='liste_collaborateurs'),
     path('ajouter-collaborateur/', ajouter_collaborateur, name='ajouter_collaborateur'),
     path('modifier-collaborateur/<int:pk>/', modifier_collaborateur, name='modifier_collaborateur'),
     path('supprimer-collaborateur/<int:pk>/', supprimer_collaborateur, name='supprimer_collaborateur'),
+
+    path('equipes/', equipes_list, name='equipes-list'),
+    path('ajouter-equipe/', ajouter_equipe, name='ajouter_equipe'),
+    path('modifier-equipe/<int:pk>/', modifier_equipe, name='modifier_equipe'),
+    path('supprimer-equipe/<int:pk>/', supprimer_equipe, name='supprimer_equipe'),
+
+    path('emplois/', emplois_list, name='emploi-list'),
+    path('ajouter-emploi/', ajouter_emploi, name='ajouter_emploi'),
+    path('modifier-emploi/<int:pk>/', modifier_emploi, name='modifier_emploi'),
+    path('supprimer-emploi/<int:pk>/', supprimer_emploi, name='supprimer_emploi'),
+
     path('dayoff/', dayoff, name='dayoff'),
+    path('appliquer-politique-absences/', appliquer_politique_absences, name='appliquer_politique_absences'),
+    path('organigramme/',organization_chart,name='organigramme'),
 ]
 
 if settings.DEBUG:

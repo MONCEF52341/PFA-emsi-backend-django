@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des équipes{% endblock %}
+
+{% block content %}
+
+<div class="navbarCollaborateurs">
+    <ul>
+        <li><a href="{% url 'liste_collaborateurs' %}" class="{% if request.path == '/collaborateurs/' %}active{% endif %}">Collaborateurs</a></li>
+        <li><a href="{% url 'equipes-list' %}" class="{% if 'equipes' in request.path %}active{% endif %}">Équipes</a></li>
+        <li><a href="{% url 'emploi-list' %}" class="{% if 'emplois' in request.path %}active{% endif %}">Emplois</a></li>
+        <li><a href="{% url 'organigramme' %}" class="{% if 'organigramme' in request.path %}active{% endif %}">Organigramme</a></li>
+    </ul>
+</div>
+    <h1>Liste des Équipes</h1>
+    <a  href="{% url 'ajouter_equipe'%}" class="button-link">Ajouter une equipe</a>
+    <form method="GET">
+        <input type="text" name="query" placeholder="Rechercher par nom">
+        <button type="submit">Rechercher</button>
+    </form>
+    <table class="collaborateurs-table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Responsable</th>
+                <th>Politique d'absences</th>
+                <th>Nombre de Membres</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for equipe in equipes %}
+                <tr>
+                    <td>{{ equipe.nom }}</td>
+                    <td>{{ equipe.description }}</td>
+                    <td>{{ equipe.responsable }}</td>
+                    <td>{{ equipe.responsable.politique_conges }}</td>
+                    <td>{{ equipe.collaborateur_set.count }}</td>
+                    <td>
+                        <a href="{% url 'modifier_equipe' pk=equipe.pk %}">Détails</a>
+                        <a href="{% url 'supprimer_equipe' pk=equipe.pk %}">Supprimer</a>    
+                        <button class="appliquer-politique" data-equipe-id="{{ equipe.pk }}" onclick="openPopup()">Appliquer une politique d'absences</button>                
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="overlay" style="display: none;"></div> <!-- Arrière-plan opaque -->
+<div id="popup-form" style="display: none;"> <!-- Pop-up -->
+    <form method="POST" action="{% url 'appliquer_politique_absences' %}">
+        {% csrf_token %}
+        <label for="politique-absences">Politique d'absences :</label>
+        <select name="politique-absences" id="politique-absences">
+            {% for politique in politiques_absences %}
+                <option value="{{ politique.id }}">{{ politique.nom }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Appliquer</button>
+    </form>
+</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var buttons = document.querySelectorAll('.appliquer-politique');
+    
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var equipeId = button.getAttribute('data-equipe-id');
+                    var popupForm = document.querySelector('#popup-form');
+                    // Afficher le formulaire pop-up
+                    popupForm.style.display = 'block';
+                });
+            });
+        });
+    </script>
+    
+{% endblock %}

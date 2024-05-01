@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des emploi{% endblock %}
+
+{% block content %}
+
+<div class="navbarCollaborateurs">
+    <ul>
+        <li><a href="{% url 'liste_collaborateurs' %}" class="{% if request.path == '/collaborateurs/' %}active{% endif %}">Collaborateurs</a></li>
+        <li><a href="{% url 'equipes-list' %}" class="{% if 'equipes' in request.path %}active{% endif %}">Équipes</a></li>
+        <li><a href="{% url 'emploi-list' %}" class="{% if 'emplois' in request.path %}active{% endif %}">Emplois</a></li>
+        <li><a href="{% url 'organigramme' %}" class="{% if 'organigramme' in request.path %}active{% endif %}">Organigramme</a></li>
+    </ul>
+</div>
+    <h1>Liste des Équipes</h1>
+    <a  href="{% url 'ajouter_emploi'%}" class="button-link">Ajouter un emploi</a>
+    <form method="GET">
+        <input type="text" name="query" placeholder="Rechercher par intitulé">
+        <button type="submit">Rechercher</button>
+    </form>
+    <table class="collaborateurs-table">
+        <thead>
+            <tr>
+                <th>Intitulé</th>
+                <th><form method="GET">
+                    <select name="niveau" id="niveau">
+                        <option value="">Tous</option>
+                        <option value="Junior">Junior</option>
+                        <option value="Moyen">Moyen</option>
+                        <option value="Senior">Senior</option>
+                    </select>
+                    <button type="submit">Filtrer</button>
+                </form>
+                </th>
+                <th>Entité juridique</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emploi in emplois %}
+                <tr>
+                    <td>{{ emploi.intitule }}</td>
+                    <td>{{ emploi.niveau }}</td>
+                    <td>{{ emploi.entite_juridique }}</td>
+                    <td>
+                        <a href="{% url 'modifier_emploi' pk=emploi.pk %}">Détails</a>
+                        <a href="{% url 'supprimer_emploi' pk=emploi.pk %}">Supprimer</a>                    
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
