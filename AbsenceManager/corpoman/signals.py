@@ -14,7 +14,8 @@ def create_or_update_user_for_collaborateur(sender, instance, created, **kwargs)
         user = User.objects.create_user(
             username= instance.nom.capitalize()[0] +"."+ instance.prenom.upper(),
             password="Pa123456",
-            email=instance.email_professionnel, 
+            email=instance.email_professionnel,
+            first_name=instance.prenom, 
             last_name=instance.nom
         )
         instance.user = user

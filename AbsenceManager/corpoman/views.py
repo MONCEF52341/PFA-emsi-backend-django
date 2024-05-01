@@ -352,3 +352,19 @@ def organization_chart(request):
         org_charts.append(create_organization_chart(collaborateur))
 
     return render(request, 'organization_chart.html', {'org_charts': org_charts})
+
+@login_required
+def mon_profil(request):
+    collaborateur = request.user.collaborateur  # Récupérer le profil du collaborateur actuellement connecté
+    if request.method == 'POST':
+        form = MyprofileForm(request.POST, instance=collaborateur)
+        if form.is_valid():
+            form.save()
+            return redirect('mon_profil')
+    else:
+        form = MyprofileForm(instance=collaborateur)
+        
+    return render(request, 'myprofile.html', {'form': form})
+
+
+    

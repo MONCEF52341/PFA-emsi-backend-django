@@ -67,3 +67,21 @@ class SeniorityForm(forms.ModelForm):
     class Meta:
         model = Seniority
         fields = '__all__'
+
+class MyprofileForm(forms.ModelForm):
+    class Meta:
+        model = Collaborateur
+        fields = ['prenom', 'nom', 'date_naissance', 'adresse', 'ville', 'code_postal', 'pays', 'numero_telephone','contact_urgence_nom','contact_urgence_telephone']
+
+        labels = {
+            'prenom': 'Prénom',
+            'nom': 'Nom',
+            'date_naissance': 'Date de naissance',
+            'adresse': 'Adresse',
+            'ville': 'Ville',
+            'code_postal': 'Code postal',
+            'pays': 'Pays',
+            'numero_telephone': 'Téléphone',
+            'contact_urgence_nom': 'Nom de contact en cas d\'urgence',
+            'contact_urgence_telephone': 'Téléphone de contact en cas d\'urgence',
+        }

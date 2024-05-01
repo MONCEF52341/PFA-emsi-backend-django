@@ -19,8 +19,7 @@
             Nom de la plateforme
         </div>
         <div class="user-info">
-            <img src="{{ user.avatar.url }}" alt="Avatar" height="50px">
-            <span>{{ user.full_name }}</span>
+            <img src="{{ user.avatar.url }}" alt="{{ user.last_name }}" height="50px">
         </div>
         <div class="logout">
             <form action="{% url 'logout' %}" method="post">
@@ -39,7 +38,7 @@
                 <li><a href="#" class="{% if 'tasks' in request.path %}active{% endif %}">Tâches</a></li>
                 <li><a href="{% url 'dayoff' %}" class="{% if 'dayoff' in request.path %}active{% endif %}">Absences et congés</a></li>
                 <li><a href="{% url 'dayoff' %}" class="{% if 'dayoff' in request.path %}active{% endif %}">Mes absences</a></li>
-                <li><a href="#" class="{% if 'profile' in request.path %}active{% endif %}">Mon profil</a></li>
+                <li><a href="{% url 'mon_profil' %}" class="{% if 'profil' in request.path %}active{% endif %}">Mon profil</a></li>
                 {% if user.is_staff %}
                 <li><a href="{% url 'liste_collaborateurs' %}" class="{% if 'collaborateurs' in request.path %}active{% endif %}">Collaborateurs</a></li>
                 <li><a href="{% url 'admin:index' %}">Administration</a></li>

@@ -52,7 +52,9 @@ urlpatterns = [
     path('supprimer-emploi/<int:pk>/', supprimer_emploi, name='supprimer_emploi'),
 
     path('dayoff/', dayoff, name='dayoff'),
+    
     path('appliquer-politique-absences/', appliquer_politique_absences, name='appliquer_politique_absences'),
+    path('mon-profil/', mon_profil, name='mon_profil'),
     path('organigramme/',organization_chart,name='organigramme'),
 ]
 
