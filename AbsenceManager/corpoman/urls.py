@@ -56,6 +56,9 @@ urlpatterns = [
     path('appliquer-politique-absences/', appliquer_politique_absences, name='appliquer_politique_absences'),
     path('mon-profil/', mon_profil, name='mon_profil'),
     path('organigramme/',organization_chart,name='organigramme'),
+    path('populate/', populate_database, name='populate'),
+    path('evenements',Calendar_Absences,name='evenements'),
+    path('purge/', vider, name='vider_archive_collaborateur')
 ]
 
 if settings.DEBUG:

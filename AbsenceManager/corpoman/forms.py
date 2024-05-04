@@ -85,3 +85,16 @@ class MyprofileForm(forms.ModelForm):
             'contact_urgence_nom': 'Nom de contact en cas d\'urgence',
             'contact_urgence_telephone': 'Téléphone de contact en cas d\'urgence',
         }
+
+class PopulateDatabaseForm(forms.Form):
+    number_of_entries = forms.IntegerField(label='Nombre d\'entrées à générer', min_value=1)
+
+class DemandeAbsenceForm(forms.ModelForm):
+    class Meta:
+        model = DemandeAbsence
+        fields = '__all__'
+        exclude = ['approbateur']
+        widgets = {
+            'date_debut': forms.DateInput(attrs={'type': 'date'}),
+            'date_fin': forms.DateInput(attrs={'type': 'date'}),
+        }

@@ -1,8 +1,11 @@
+import random
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required,user_passes_test
 from rest_framework import generics
+from faker import Faker
 from .forms import *
 from .models import *
 from .serializers import *
@@ -139,7 +142,14 @@ def accueil(request):
 
 @login_required
 def dayoff(request):
-    return render(request, 'dayoff/absence.html')
+    if request.method == 'POST':
+        form = DemandeAbsenceForm(request.POST)
+        if form.is_valid():
+            form.instance.employe = request.user.collaborateur
+            form.save()
+    else:
+        form = DemandeAbsenceForm()
+    return render(request, 'dayoff/absence.html', {'form': form})
 
 @user_passes_test(lambda u: u.is_superuser)
 def collaborateurs_list(request):
@@ -366,5 +376,63 @@ def mon_profil(request):
         
     return render(request, 'myprofile.html', {'form': form})
 
+def populate_database(request):
+    if request.method == 'POST':
+        form = PopulateDatabaseForm(request.POST)
+        if form.is_valid():
+            number_of_entries = form.cleaned_data['number_of_entries']
+            fake = Faker()
+            for _ in range(number_of_entries):
+                # Créez une instance de votre modèle avec des données fictives
+                # Assurez-vous d'importer votre modèle et de remplacer "VotreModele" par le nom de votre modèle
+                instance = Collaborateur(
+                    prenom=fake.first_name(),
+                    nom=fake.last_name(),
+                    avatar=None,  # Si vous ne générez pas d'avatar fictif
+                    matricule=fake.unique.random_number(digits=11),
+                    date_naissance=fake.date_of_birth(minimum_age=18, maximum_age=90),
+                    genre=random.choice(['M', 'F']),
+                    nationalite=fake.country(),
+                    numero_telephone=''.join(filter(str.isdigit, fake.phone_number())),
+                    adresse=fake.street_address(),
+                    ville=fake.city(),
+                    code_postal=fake.postcode(),
+                    departement=fake.state(),
+                    pays=fake.country(),
+                    contact_urgence_nom=fake.name(),
+                    contact_urgence_telephone=fake.phone_number(),
+                    email_personnel=fake.email(),
+                    email_professionnel=fake.company_email(),
+                    entite_juridique=EntiteJuridique.objects.order_by('?').first(),  # Choisissez une entité juridique aléatoire
+                    date_anciennete=fake.date_this_decade(),
+                    lieu_travail=LieuTravail.objects.order_by('?').first(),  # Choisissez un lieu de travail aléatoire
+                    politique_conges=PolitiqueAbsences.objects.order_by('?').first(),  # Choisissez une politique de congés aléatoire
+                    Equipe=Equipe.objects.order_by('?').first(),  # Choisissez une équipe aléatoire
+                    contrat=Contrat.objects.order_by('?').first(),  # Choisissez un contrat aléatoire
+                    emploi=Emploi.objects.order_by('?').first(),  # Choisissez un emploi aléatoire
+                    manager=Collaborateur.objects.order_by('?').last(),  # Choisissez un manager aléatoire
+                )
+                instance.save()
+            return render(request, 'myprofile.html')  # Redirigez vers une page de succès ou affichez un message de succès
+    else:
+        form = PopulateDatabaseForm()
+    return render(request, 'populate.html', {'form': form})
 
-    
+def vider(request):
+    if request.method == 'POST':
+        ArchiveCollaborateur.objects.all().delete()
+        return render(request, 'myprofile.html')  # Redirigez vers une page de succès ou affichez un message de succès
+    return render(request, 'purge.html')
+
+
+def Calendar_Absences(request):
+    evenements = DemandeAbsence.objects.all()
+    events_data = []
+    for evenement in evenements:
+        events_data.append({
+            'title': f"{evenement.employe.nom} {evenement.employe.prenom}, {evenement.type_absence}, {evenement.date_debut.strftime('%Y-%m-%d')}" + (f" - {evenement.date_fin.strftime('%Y-%m-%d')}" if evenement.date_fin else ""),
+            'start': evenement.date_debut.strftime('%Y-%m-%d'),
+            'end' : evenement.date_fin.strftime('%Y-%m-%d') if evenement.date_fin else "",
+        })
+    return JsonResponse(events_data, safe=False)
+
