@@ -8,6 +8,7 @@
     <title>{% block title %}Page de base{% endblock %}</title>
     <script src="{% static 'js/calendar.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/x-icon">
 </head>
 <body>
     <!-- Barre de navigation -->
@@ -16,8 +17,8 @@
             <!-- Insérez votre logo ici -->
         </div>
         <div class="platform-name">
-            Nom de la plateforme
-        </div>
+            <img src="{% static 'img/platform.png' %}" alt="Corpoman" height="35">
+        </div>        
         <div class="user-info">
             <img src="{{ user.avatar.url }}" alt="{{ user.last_name }}" height="50px">
         </div>

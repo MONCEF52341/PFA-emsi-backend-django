@@ -93,7 +93,7 @@ class DemandeAbsenceForm(forms.ModelForm):
     class Meta:
         model = DemandeAbsence
         fields = '__all__'
-        exclude = ['approbateur']
+        exclude = ['approbateur','employe']
         widgets = {
             'date_debut': forms.DateInput(attrs={'type': 'date'}),
             'date_fin': forms.DateInput(attrs={'type': 'date'}),

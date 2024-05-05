@@ -140,16 +140,44 @@ def dashboard(request):
 def accueil(request):
     return render(request, 'home.html')
 
-@login_required
-def dayoff(request):
+
+def get_pris(employe):
+    pris = 0
+    demandes=DemandeAbsence.objects.filter(employe=employe)
+    for demande in demandes:
+        if(demande.type_absence.deduire_du_compteur):
+            if(demande.date_fin):
+                duree_abs = demande.date_fin - demande.date_debut
+                pris += duree_abs.days
+    return pris
+
+def get_acquis(employe):
+    return employe.politique_conges.compteur_absences.configuration.maximum_eligible_days
+
+def get_demandes_absence(employe):
+    return DemandeAbsence.objects.filter(employe=employe)
+
+def create_demande_absence(request):
     if request.method == 'POST':
         form = DemandeAbsenceForm(request.POST)
         if form.is_valid():
             form.instance.employe = request.user.collaborateur
             form.save()
+            return redirect(request.path)
     else:
         form = DemandeAbsenceForm()
-    return render(request, 'dayoff/absence.html', {'form': form})
+    return form
+
+@login_required
+def dayoff(request):
+    employe = request.user.collaborateur
+    pris = get_pris(employe)
+    acquis = get_acquis(employe)
+    solde = acquis - pris
+    demandes_absence = get_demandes_absence(employe)
+    form = create_demande_absence(request)
+    return render(request, 'dayoff/absence.html', {'form': form, 'pris': pris, 'acquis': acquis, 'solde': solde, 'demandes_absence': demandes_absence})
+
 
 @user_passes_test(lambda u: u.is_superuser)
 def collaborateurs_list(request):
@@ -233,7 +261,7 @@ def supprimer_collaborateur(request, pk):
 
 @login_required
 def equipes_list(request):
-    query = request.GET.get('query') # Récupérer le paramètre de recherche
+    query = request.GET.get('query')
     equipes = Equipe.objects.all()
     politiques_absences = PolitiqueAbsences.objects.all()
     if query:
@@ -430,7 +458,7 @@ def Calendar_Absences(request):
     events_data = []
     for evenement in evenements:
         events_data.append({
-            'title': f"{evenement.employe.nom} {evenement.employe.prenom}, {evenement.type_absence}, {evenement.date_debut.strftime('%Y-%m-%d')}" + (f" - {evenement.date_fin.strftime('%Y-%m-%d')}" if evenement.date_fin else ""),
+            'title': f"{evenement.employe.nom} {evenement.employe.prenom}, {evenement.type_absence.nom}, {evenement.date_debut.strftime('%Y-%m-%d')}" + (f" - {evenement.date_fin.strftime('%Y-%m-%d')}" if evenement.date_fin else ""),
             'start': evenement.date_debut.strftime('%Y-%m-%d'),
             'end' : evenement.date_fin.strftime('%Y-%m-%d') if evenement.date_fin else "",
         })

@@ -24,7 +24,6 @@
     <button id="btn-special">Bouton spécial</button>
     {% endif %}
 
-    <!-- Tableau pour les absences -->
     <table>
         <thead>
             <tr>
@@ -35,14 +34,12 @@
         </thead>
         <tbody>
             <tr>
-                <th>Acquis</th>
-                <th>Solde</th>
-                <th>Pris</th>
+                <th>{{ acquis }}</th>
+                <th>{{ solde }}</th>
+                <th>{{ pris }}</th>
             </tr>
         </tbody>
     </table>
-
-    <!-- Tableau pour les types d'absences -->
     <h2>Types d'absences</h2>
     <table>
         <thead>
@@ -53,11 +50,17 @@
             </tr>
         </thead>
         <tbody>
+            {% for demande in demandes_absence %}
             <tr>
-                <th>Acquis</th>
-                <th>Solde</th>
-                <th>Pris</th>
+                <td>{{ demande.type_absence.nom }}</td>
+                <td>{{ demande.date_debut }}</td>
+                {% if demande.date_fin %}
+                    <td>{{ demande.date_fin }}</td>
+                {% else %}
+                    <td>Pas de date de annoncée</td>
+                {% endif %}
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
