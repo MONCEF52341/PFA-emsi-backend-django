@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+
+ <!-- Bouton pour ajouter une absence -->
+<div class="left-panel">
+    <h2>Absences</h2>
+    <button id="btn-ajouter-absence">Ajouter une absence</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close"></span>
+            <!-- Formulaire ici -->
+            <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit">Soumettre</button>
+            </form>
+        </div>
+    </div>
+    <!-- Bouton visible uniquement pour les super utilisateurs -->
+    {% if user.is_superuser %}
+    <button id="btn-special">Bouton spécial</button>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Acquis</th>
+                <th>Solde</th>
+                <th>Pris</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>{{ acquis }}</th>
+                <th>{{ solde }}</th>
+                <th>{{ pris }}</th>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Types d'absences</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Du</th>
+                <th>Au</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for demande in demandes_absence %}
+            <tr>
+                <td>{{ demande.type_absence.nom }}</td>
+                <td>{{ demande.date_debut }}</td>
+                {% if demande.date_fin %}
+                    <td>{{ demande.date_fin }}</td>
+                {% else %}
+                    <td>Pas de date de annoncée</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+    <div id="calendrier"></div>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendrier');
+      
+          
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'multiMonthYear,dayGridMonth,timeGridWeek'
+            },
+            initialView: 'multiMonthYear',
+            initialDate: '2024-01-01',
+            editable: true,
+            selectable: true,
+            dayMaxEvents: true, // allow "more" link when too many events
+            // multiMonthMaxColumns: 1, // guarantee single column
+            // showNonCurrentDates: true,
+            // fixedWeekCount: false,
+            // businessHours: true,
+            // weekends: false,
+             events: '{% url "evenements" %}'
+
+          });
+      
+          calendar.render();
+        });
+    var modal = document.getElementById("myModal");
+
+    // Récupérer le bouton pour ouvrir la boîte modale
+    var btn = document.getElementById("btn-ajouter-absence");
+
+    // Récupérer le span qui permet de fermer la boîte modale
+    var span = document.getElementsByClassName("close")[0];
+
+    var calendarEl = document.getElementById('calendrier');
+
+    // Lorsque l'utilisateur clique sur le bouton, ouvrir la boîte modale
+    btn.onclick = function() {
+        modal.style.display = "block";
+        calendrier.classList.add("hidden");
+    }
+
+    // Lorsque l'utilisateur clique sur <span> (x), fermer la boîte modale
+    span.onclick = function() {
+        modal.style.display = "none";
+        calendrier.classList.remove("hidden");
+    }
+
+    // Lorsque l'utilisateur clique en dehors de la boîte modale, la fermer
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            calendrier.classList.remove("hidden");
+        }
+    }
+      </script>
+{% endblock %}

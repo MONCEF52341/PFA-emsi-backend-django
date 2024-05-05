@@ -1,0 +1,19 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Supprimer une équipe</title>
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+</head>
+<body>
+    <h1>Supprimer une équipe</h1>
+    <p>Êtes-vous sûr de la suppression de l'équipe: {{ equipe }} ?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmer la suppression</button>
+        <a href="{% url 'emploi-list' %}"><button type="button">Annuler</button></a>
+    </form>
+</body>
+</html>

@@ -1,0 +1,313 @@
+/* CSS pour le contenu de la page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Barre de navigation */
+/* CSS pour la barre de navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    z-index: 1000;
+}
+
+/* Placer le nom de la plateforme à gauche */
+.navbar .platform-name {
+    order: -1; /* Pour le placer au début */
+    margin-right: auto; /* Pour le pousser tout à gauche */
+    margin-left: 20px; /* Ajoutez un espacement après le logo */
+}
+
+
+.navbar .user-info {
+    margin-right: 20px;
+}
+
+.navbar .user-info img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.navbar .logout a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Barre de navigation verticale */
+.sidebar {
+    background-color: #f4f4f4;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    overflow-y: auto;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+}
+
+.sidebar ul li a {
+    color: #333;
+    text-decoration: none;
+}
+
+.sidebar ul li a.active {
+    font-weight: bold;
+    background-color: #ddd;
+}
+
+/* Contenu de la page */
+.page-content {
+    margin-left: 200px;
+    padding: 20px;
+}
+.accordion-section {
+    width: calc(40% - 20px); /* Moins d'un quart de la taille de l'écran avec une marge entre les sections */
+    margin: 10px; /* Marge autour des sections */
+    display: inline-block; /* Afficher les sections sur la même ligne */
+    vertical-align: top; /* Alignement vertical en haut */
+}
+
+.accordion {
+    background-color: #f4f4f4; /* Changement de la couleur de fond */
+    color: #333; /* Changement de la couleur du texte */
+    cursor: pointer;
+    padding: 15px; /* Réduction de la taille du padding */
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: background-color 0.4s; /* Ajout de la transition pour le changement de couleur de fond */
+}
+
+/* Ajout du style pour le cas où le bouton est cliqué ou survolé */
+.active, .accordion:hover {
+    background-color: #ddd; /* Couleur de fond légèrement plus foncée */
+    color: #000; /* Changement de couleur du texte pour améliorer la visibilité */
+}
+
+/* Style du contenu de l'accordéon */
+.panel {
+    padding: 10px; /* Réduction de la taille du padding */
+    background-color: #fff; /* Couleur de fond blanche */
+    display: none;
+    overflow: hidden;
+}
+
+.admin-content {
+    margin-top: 20px;
+}
+
+.admin-content h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.admin-content ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.admin-content ul li {
+    margin-bottom: 10px;
+}
+
+.admin-content ul li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.admin-content ul li a:hover {
+    font-weight: bold;
+}
+
+.navbarCollaborateurs {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+.navbarCollaborateurs ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.navbarCollaborateurs ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.navbarCollaborateurs ul li:last-child {
+    margin-right: 0;
+}
+
+.navbarCollaborateurs ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+.navbarCollaborateurs ul li a:hover {
+    background-color: #555;
+}
+
+.navbarCollaborateurs ul li a.active {
+    font-weight: bold;
+    color: #ff0000; /* couleur rouge pour le lien actif */
+    /* autres styles */
+}
+
+/* CSS pour la table des collaborateurs */
+.collaborateurs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.collaborateurs-table th, .collaborateurs-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.collaborateurs-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+.collaborateurs-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.collaborateurs-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+.collaborateurs-table img {
+    border-radius: 50%;
+}
+
+.button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-link:hover {
+    background-color: #45a049;
+}
+
+.container {
+    display: flex; /* Utilisation du flexbox pour disposer les éléments horizontalement */
+}
+
+/* Style pour la partie gauche (boutons et tableaux) */
+.left-panel {
+    flex: 1; /* La partie gauche prendra autant d'espace que possible */
+    padding-right: 20px; /* Espacement à droite pour séparer du calendrier */
+}
+
+#calendrier {
+    max-width: 1200px;
+    height: fit-content;
+    margin: 0 auto;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+  }
+
+#calendrier.hidden {
+    opacity: 0;
+}
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+@-webkit-keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+#popup-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000; /* Assure que le pop-up est au-dessus de tout le reste */
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Opacité de 50% */
+    z-index: 999; /* Assure que l'arrière-plan est en dessous du pop-up */
+}
