@@ -1,0 +1,7 @@
+Compte admin
+Login = A.ADMIN 
+mdp = Pa123456
+
+Compte user
+Login = U.USER
+mdp = Pa123456
