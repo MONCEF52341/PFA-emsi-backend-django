@@ -1,7 +1,8 @@
-#Validators permet de créer des critères de validations personnalisés
+# Validators permet de créer des critères de validations personnalisés
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
 
 def validate_avatar(value):
     # Vérifier si le fichier est une image
@@ -20,4 +21,3 @@ def validate_avatar(value):
     # Vérifier les dimensions de l'image (entre 128x128 et 1080x1080)
     if not (128 <= width <= 1080 and 128 <= height <= 1080):
         raise ValidationError(_('Les dimensions de l\'image doivent être entre 128x128 et 1080x1080 pixels.'))
-

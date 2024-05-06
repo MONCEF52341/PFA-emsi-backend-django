@@ -3,7 +3,6 @@
 {% block title %}Liste des collaborateurs{% endblock %}
 
 {% block content %}
-
 <div class="navbarCollaborateurs">
     <ul>
         <li><a href="{% url 'liste_collaborateurs' %}" class="{% if request.path == '/collaborateurs/' %}active{% endif %}">Collaborateurs</a></li>
@@ -12,8 +11,6 @@
         <li><a href="{% url 'organigramme' %}" class="{% if 'organigramme' in request.path %}active{% endif %}">Organigramme</a></li>
     </ul>
 </div>
-
-
     <h2>Liste des collaborateurs</h2>
     <table class="collaborateurs-table">
         <a  href="{% url 'ajouter_collaborateur'%}" class="button-link">Ajouter un collaborateur</a>

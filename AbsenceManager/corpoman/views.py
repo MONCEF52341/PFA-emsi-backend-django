@@ -1,133 +1,163 @@
 import random
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, render,redirect
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required,user_passes_test
-from rest_framework import generics
 from faker import Faker
+from rest_framework import generics
+
 from .forms import *
-from .models import *
 from .serializers import *
+
 
 class CollaborateurListCreateAPIView(generics.ListCreateAPIView):
     queryset = Collaborateur.objects.all()
     serializer_class = CollaborateurSerializer
 
+
 class CollaborateurRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Collaborateur.objects.all()
     serializer_class = CollaborateurSerializer
+
 
 class DemandeAbsenceListCreateAPIView(generics.ListCreateAPIView):
     queryset = DemandeAbsence.objects.all()
     serializer_class = DemandeAbsenceSerializer
 
+
 class DemandeAbsenceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = DemandeAbsence.objects.all()
     serializer_class = DemandeAbsenceSerializer
+
 
 class EquipeListCreateAPIView(generics.ListCreateAPIView):
     queryset = Equipe.objects.all()
     serializer_class = EquipeSerializer
 
+
 class EquipeRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Equipe.objects.all()
     serializer_class = EquipeSerializer
+
 
 class EntiteJuridiqueListCreateAPIView(generics.ListCreateAPIView):
     queryset = EntiteJuridique.objects.all()
     serializer_class = EntiteJuridiqueSerializer
 
+
 class EntiteJuridiqueRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = EntiteJuridique.objects.all()
     serializer_class = EntiteJuridiqueSerializer
+
 
 class LieuTravailListCreateAPIView(generics.ListCreateAPIView):
     queryset = LieuTravail.objects.all()
     serializer_class = LieuTravailSerializer
 
+
 class LieuTravailRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = LieuTravail.objects.all()
     serializer_class = LieuTravailSerializer
+
 
 class EmploiListCreateAPIView(generics.ListCreateAPIView):
     queryset = Emploi.objects.all()
     serializer_class = EmploiSerializer
 
+
 class EmploiRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Emploi.objects.all()
     serializer_class = EmploiSerializer
+
 
 class ContratListCreateAPIView(generics.ListCreateAPIView):
     queryset = Contrat.objects.all()
     serializer_class = ContratSerializer
 
+
 class ContratRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contrat.objects.all()
     serializer_class = ContratSerializer
+
 
 class HeuresContractuellesListCreateAPIView(generics.ListCreateAPIView):
     queryset = HeuresContractuelles.objects.all()
     serializer_class = HeuresContractuellesSerializer
 
+
 class HeuresContractuellesRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = HeuresContractuelles.objects.all()
     serializer_class = HeuresContractuellesSerializer
+
 
 class PolitiqueAbsencesListCreateAPIView(generics.ListCreateAPIView):
     queryset = PolitiqueAbsences.objects.all()
     serializer_class = PolitiqueAbsencesSerializer
 
+
 class PolitiqueAbsencesRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = PolitiqueAbsences.objects.all()
     serializer_class = PolitiqueAbsencesSerializer
+
 
 class CompteurAbsencesListCreateAPIView(generics.ListCreateAPIView):
     queryset = CompteurAbsences.objects.all()
     serializer_class = CompteurAbsencesSerializer
 
+
 class CompteurAbsencesRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CompteurAbsences.objects.all()
     serializer_class = CompteurAbsencesSerializer
+
 
 class TypeAbsenceListCreateAPIView(generics.ListCreateAPIView):
     queryset = TypeAbsence.objects.all()
     serializer_class = TypeAbsenceSerializer
 
+
 class TypeAbsenceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = TypeAbsence.objects.all()
     serializer_class = TypeAbsenceSerializer
+
 
 class CycleListCreateAPIView(generics.ListCreateAPIView):
     queryset = Cycle.objects.all()
     serializer_class = CycleSerializer
 
+
 class CycleRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Cycle.objects.all()
     serializer_class = CycleSerializer
+
 
 class ConfigurationListCreateAPIView(generics.ListCreateAPIView):
     queryset = Configuration.objects.all()
     serializer_class = ConfigurationSerializer
 
+
 class ConfigurationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Configuration.objects.all()
     serializer_class = ConfigurationSerializer
+
 
 class SeniorityListCreateAPIView(generics.ListCreateAPIView):
     queryset = Seniority.objects.all()
     serializer_class = SenioritySerializer
 
+
 class SeniorityRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Seniority.objects.all()
     serializer_class = SenioritySerializer
 
+
 @user_passes_test(lambda u: u.is_superuser)
 def dashboard(request):
     counts = []
-    models = [Collaborateur,Configuration,TypeAbsence,CompteurAbsences,DemandeAbsence,
-              PolitiqueAbsences,Contrat,Equipe,Emploi,HeuresContractuelles,EntiteJuridique,
-              Cycle,Seniority,LieuTravail]  # Ajoutez tous vos modèles ici
+    models = [Collaborateur, Configuration, TypeAbsence, CompteurAbsences, DemandeAbsence,
+              PolitiqueAbsences, Contrat, Equipe, Emploi, HeuresContractuelles, EntiteJuridique,
+              Cycle, Seniority, LieuTravail]  # Ajoutez tous vos modèles ici
 
     for model in models:
         count = model.objects.count()
@@ -136,6 +166,7 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', {'counts': counts})
 
+
 @login_required
 def accueil(request):
     return render(request, 'home.html')
@@ -143,19 +174,22 @@ def accueil(request):
 
 def get_pris(employe):
     pris = 0
-    demandes=DemandeAbsence.objects.filter(employe=employe)
+    demandes = DemandeAbsence.objects.filter(employe=employe)
     for demande in demandes:
-        if(demande.type_absence.deduire_du_compteur):
-            if(demande.date_fin):
+        if demande.type_absence.deduire_du_compteur:
+            if demande.date_fin:
                 duree_abs = demande.date_fin - demande.date_debut
                 pris += duree_abs.days
     return pris
 
+
 def get_acquis(employe):
     return employe.politique_conges.compteur_absences.configuration.maximum_eligible_days
 
+
 def get_demandes_absence(employe):
     return DemandeAbsence.objects.filter(employe=employe)
+
 
 def create_demande_absence(request):
     if request.method == 'POST':
@@ -168,6 +202,7 @@ def create_demande_absence(request):
         form = DemandeAbsenceForm()
     return form
 
+
 @login_required
 def dayoff(request):
     employe = request.user.collaborateur
@@ -176,7 +211,8 @@ def dayoff(request):
     solde = acquis - pris
     demandes_absence = get_demandes_absence(employe)
     form = create_demande_absence(request)
-    return render(request, 'dayoff/absence.html', {'form': form, 'pris': pris, 'acquis': acquis, 'solde': solde, 'demandes_absence': demandes_absence})
+    return render(request, 'dayoff/absence.html',
+                  {'form': form, 'pris': pris, 'acquis': acquis, 'solde': solde, 'demandes_absence': demandes_absence})
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -212,6 +248,7 @@ def collaborateurs_list(request):
 
     return render(request, 'collaborateurs/collaborateurs.html', {'collaborateurs': collaborateurs})
 
+
 @user_passes_test(lambda u: u.is_superuser)
 def ajouter_collaborateur(request):
     if request.method == 'POST':
@@ -236,6 +273,7 @@ def modifier_collaborateur(request, pk):
         form = CollaborateurForm(instance=collaborateur)
     return render(request, 'collaborateurs/modifier_collaborateur.html', {'form': form})
 
+
 @user_passes_test(lambda u: u.is_superuser)
 def supprimer_collaborateur(request, pk):
     collaborateur = get_object_or_404(Collaborateur, pk=pk)
@@ -259,6 +297,7 @@ def supprimer_collaborateur(request, pk):
         return redirect('liste_collaborateurs')
     return render(request, 'collaborateurs/supprimer_collaborateur.html', {'collaborateur': collaborateur})
 
+
 @login_required
 def equipes_list(request):
     query = request.GET.get('query')
@@ -267,7 +306,8 @@ def equipes_list(request):
     if query:
         equipes = equipes.filter(nom__icontains=query)
 
-    return render(request, 'equipes/equipe.html', {'equipes': equipes, 'query': query, 'politiques_absences': politiques_absences})
+    return render(request, 'equipes/equipe.html',
+                  {'equipes': equipes, 'query': query, 'politiques_absences': politiques_absences})
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -302,6 +342,7 @@ def supprimer_equipe(request, pk):
         equipe.delete()
         return redirect('liste_collaborateurs')
     return render(request, 'equipes/supprimer_equipe.html', {'equipe': equipe})
+
 
 @login_required
 def emplois_list(request):
@@ -349,14 +390,15 @@ def supprimer_emploi(request, pk):
         return redirect('emplois-list')
     return render(request, 'emplois/supprimer_emploi.html', {'emploi': emploi})
 
+
 def appliquer_politique_absences(request):
     if request.method == 'POST':
         politique_id = request.POST.get('politique-absences')
         equipe_id = request.POST.get('equipe-id')
-        
+
         # Récupérer l'équipe
         equipe = Equipe.objects.get(pk=equipe_id)
-        
+
         # Assigner la politique d'absences à l'équipe
         politique_absences = PolitiqueAbsences.objects.get(pk=politique_id)
 
@@ -365,12 +407,13 @@ def appliquer_politique_absences(request):
         for employe in employes:
             employe.politique_absences = politique_absences
             employe.save()
-        
+
         return redirect('equipes-list')
     else:
         politiques_absences = PolitiqueAbsences.objects.all()
         return render(request, 'popup-form.html', {'politiques_absences': politiques_absences})
-    
+
+
 def create_organization_chart(collaborateur):
     ids_collaborateurs_archives = ArchiveCollaborateur.objects.values_list('id', flat=True)
     chart = {'collaborateur': collaborateur, 'subordinates': []}
@@ -380,6 +423,7 @@ def create_organization_chart(collaborateur):
         chart['subordinates'].append(create_organization_chart(subordinate))
 
     return chart
+
 
 def organization_chart(request):
     ids_collaborateurs_archives = ArchiveCollaborateur.objects.values_list('id', flat=True)
@@ -391,6 +435,7 @@ def organization_chart(request):
 
     return render(request, 'organization_chart.html', {'org_charts': org_charts})
 
+
 @login_required
 def mon_profil(request):
     collaborateur = request.user.collaborateur  # Récupérer le profil du collaborateur actuellement connecté
@@ -401,8 +446,9 @@ def mon_profil(request):
             return redirect('mon_profil')
     else:
         form = MyprofileForm(instance=collaborateur)
-        
+
     return render(request, 'myprofile.html', {'form': form})
+
 
 def populate_database(request):
     if request.method == 'POST':
@@ -431,20 +477,24 @@ def populate_database(request):
                     contact_urgence_telephone=fake.phone_number(),
                     email_personnel=fake.email(),
                     email_professionnel=fake.company_email(),
-                    entite_juridique=EntiteJuridique.objects.order_by('?').first(),  # Choisissez une entité juridique aléatoire
+                    entite_juridique=EntiteJuridique.objects.order_by('?').first(),
+                    # Choisissez une entité juridique aléatoire
                     date_anciennete=fake.date_this_decade(),
                     lieu_travail=LieuTravail.objects.order_by('?').first(),  # Choisissez un lieu de travail aléatoire
-                    politique_conges=PolitiqueAbsences.objects.order_by('?').first(),  # Choisissez une politique de congés aléatoire
+                    politique_conges=PolitiqueAbsences.objects.order_by('?').first(),
+                    # Choisissez une politique de congés aléatoire
                     Equipe=Equipe.objects.order_by('?').first(),  # Choisissez une équipe aléatoire
                     contrat=Contrat.objects.order_by('?').first(),  # Choisissez un contrat aléatoire
                     emploi=Emploi.objects.order_by('?').first(),  # Choisissez un emploi aléatoire
                     manager=Collaborateur.objects.order_by('?').last(),  # Choisissez un manager aléatoire
                 )
                 instance.save()
-            return render(request, 'myprofile.html')  # Redirigez vers une page de succès ou affichez un message de succès
+            return render(request,
+                          'myprofile.html')  # Redirigez vers une page de succès ou affichez un message de succès
     else:
         form = PopulateDatabaseForm()
     return render(request, 'populate.html', {'form': form})
+
 
 def vider(request):
     if request.method == 'POST':
@@ -453,14 +503,14 @@ def vider(request):
     return render(request, 'purge.html')
 
 
-def Calendar_Absences(request):
+def calendar_Absences(request):
     evenements = DemandeAbsence.objects.all()
     events_data = []
     for evenement in evenements:
         events_data.append({
-            'title': f"{evenement.employe.nom} {evenement.employe.prenom}, {evenement.type_absence.nom}, {evenement.date_debut.strftime('%Y-%m-%d')}" + (f" - {evenement.date_fin.strftime('%Y-%m-%d')}" if evenement.date_fin else ""),
+            'title': f"{evenement.employe.nom} {evenement.employe.prenom}, {evenement.type_absence.nom}, {evenement.date_debut.strftime('%Y-%m-%d')}" + (
+                f" - {evenement.date_fin.strftime('%Y-%m-%d')}" if evenement.date_fin else ""),
             'start': evenement.date_debut.strftime('%Y-%m-%d'),
-            'end' : evenement.date_fin.strftime('%Y-%m-%d') if evenement.date_fin else "",
+            'end': evenement.date_fin.strftime('%Y-%m-%d') if evenement.date_fin else "",
         })
     return JsonResponse(events_data, safe=False)
-

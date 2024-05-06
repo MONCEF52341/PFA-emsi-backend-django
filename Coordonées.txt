@@ -3,5 +3,5 @@ Login = A.ADMIN
 mdp = Pa123456
 
 Compte user
-Login = U.USER
+Login = L.ERIC
 mdp = Pa123456
