@@ -2,15 +2,16 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from .validators import *
-from .utils import generate_matricule,country_choices
+from .utils import generate_matricule, country_choices
 
 
 class Collaborateur(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='collaborateur', editable=False,null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='collaborateur', editable=False, null=True)
     prenom = models.CharField(max_length=100, verbose_name="Prénom")
     nom = models.CharField(max_length=100, verbose_name="Nom")
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, validators=[validate_avatar])
-    matricule = models.CharField(max_length=11, unique=True, default=generate_matricule, verbose_name="Matricule",editable=False)
+    matricule = models.CharField(max_length=11, unique=True, default=generate_matricule, verbose_name="Matricule",
+                                 editable=False)
     date_naissance = models.DateField(verbose_name="Date de naissance")
     GENRE_CHOICES = (
         ('M', 'Masculin'),
@@ -39,7 +40,8 @@ class Collaborateur(models.Model):
     Equipe = models.ForeignKey('Equipe', on_delete=models.CASCADE, verbose_name="Équipe")
     contrat = models.ForeignKey('Contrat', on_delete=models.CASCADE, verbose_name="Contrat")
     emploi = models.ForeignKey('Emploi', on_delete=models.CASCADE, verbose_name="Emploi")
-    manager = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Manager" , related_name='subordonnes')
+    manager = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Manager",
+                                related_name='subordonnes')
 
     class Meta:
         verbose_name = "Collaborateur"
@@ -48,9 +50,11 @@ class Collaborateur(models.Model):
     def __str__(self):
         return f"{self.prenom} {self.nom} ({self.matricule})"
 
+
 class DemandeAbsence(models.Model):
     employe = models.ForeignKey('Collaborateur', on_delete=models.CASCADE, verbose_name="Employé")
-    approbateur = models.ForeignKey('Collaborateur', on_delete=models.SET_NULL, null=True, blank=True, related_name="approbateur", verbose_name="Approbateur")
+    approbateur = models.ForeignKey('Collaborateur', on_delete=models.SET_NULL, null=True, blank=True,
+                                    related_name="approbateur", verbose_name="Approbateur")
     type_absence = models.ForeignKey('TypeAbsence', on_delete=models.CASCADE, verbose_name="Type d'absence")
     description = models.TextField(verbose_name="Description")
     date_debut = models.DateField(verbose_name="Date début")
@@ -67,10 +71,12 @@ class DemandeAbsence(models.Model):
         else:
             return f"Demande d'absence pour {self.employe} à partir du {self.date_debut}"
 
+
 class Equipe(models.Model):
     nom = models.CharField(max_length=100, verbose_name="Nom")
     description = models.TextField(verbose_name="Description")
-    responsable = models.ForeignKey('Collaborateur', on_delete=models.CASCADE, verbose_name="Manager/Responsable",null=True)
+    responsable = models.ForeignKey('Collaborateur', on_delete=models.CASCADE, verbose_name="Manager/Responsable",
+                                    null=True)
 
     class Meta:
         verbose_name = "Équipe"
@@ -79,6 +85,7 @@ class Equipe(models.Model):
     def __str__(self):
         return self.nom
 
+
 class EntiteJuridique(models.Model):
     raison_sociale = models.CharField(max_length=255, verbose_name="Raison sociale (Nom)")
     matricule = models.CharField(max_length=100, verbose_name="Matricule")
@@ -86,7 +93,7 @@ class EntiteJuridique(models.Model):
     ville = models.CharField(max_length=100, verbose_name="Ville")
     code_postal = models.CharField(max_length=20, verbose_name="Code postal")
     departement = models.CharField(max_length=100, verbose_name="Département")
-    pays = models.CharField(max_length=100, verbose_name="Pays",choices=country_choices())
+    pays = models.CharField(max_length=100, verbose_name="Pays", choices=country_choices())
 
     class Meta:
         verbose_name = "Entité Juridique"
@@ -94,6 +101,7 @@ class EntiteJuridique(models.Model):
 
     def __str__(self):
         return self.raison_sociale
+
 
 class LieuTravail(models.Model):
     TYPE_CHOICES = (
@@ -114,6 +122,7 @@ class LieuTravail(models.Model):
 
     def __str__(self):
         return self.designation
+
 
 class Emploi(models.Model):
     INTITULE_CHOICES = (
@@ -140,6 +149,7 @@ class Emploi(models.Model):
 
     def __str__(self):
         return f"{self.intitule} {self.niveau} - {self.entite_juridique}"
+
 
 class Contrat(models.Model):
     emploi_concerne = models.ForeignKey(
@@ -169,6 +179,7 @@ class Contrat(models.Model):
     def __str__(self):
         return self.objet
 
+
 class HeuresContractuelles(models.Model):
     heures_par_jour = models.PositiveIntegerField(verbose_name="Heures par jour")
     lundi = models.BooleanField(default=True)
@@ -187,13 +198,15 @@ class HeuresContractuelles(models.Model):
 
     def __str__(self):
         jours_travail = "".join(["Lun " if self.lundi else "",
-                                "Mar " if self.mardi else "",
-                                "Mer " if self.mercredi else "",
-                                "Jeu " if self.jeudi else "",
-                                "Ven " if self.vendredi else "",
-                                "Sam " if self.samedi else "",
-                                "Dim " if self.dimanche else ""])
-        return f"{self.heures_par_jour} heures par jour, [{jours_travail}] - {self.max_heures_par_semaine} heures maximum par semaine"
+                                 "Mar " if self.mardi else "",
+                                 "Mer " if self.mercredi else "",
+                                 "Jeu " if self.jeudi else "",
+                                 "Ven " if self.vendredi else "",
+                                 "Sam " if self.samedi else "",
+                                 "Dim " if self.dimanche else ""])
+        return (f"{self.heures_par_jour} heures par jour, [{jours_travail}] - "
+                f"{self.max_heures_par_semaine} heures maximum par semaine")
+
 
 class PolitiqueAbsences(models.Model):
     nom = models.CharField(max_length=100, verbose_name="Nom")
@@ -210,6 +223,7 @@ class PolitiqueAbsences(models.Model):
 
     def __str__(self):
         return f"{self.nom} [{self.compteur_absences}]"
+
 
 class CompteurAbsences(models.Model):
     NOM_CHOICES = (
@@ -246,6 +260,7 @@ class CompteurAbsences(models.Model):
     def __str__(self):
         return str(self.nom)
 
+
 class TypeAbsence(models.Model):
     nom = models.CharField(max_length=100, verbose_name="Nom")
     description = models.TextField(verbose_name="Description")
@@ -264,8 +279,10 @@ class TypeAbsence(models.Model):
 
     def __str__(self):
         deductions = "Déduit du compteur" if self.deduire_du_compteur else "Non Déduit du compteur"
-        approval = "et n'a pas besoin d'une approbation" if self.approbation_automatique else "et a besoin d'une approbation"
+        approval = "et n'a pas besoin d'une approbation" if self.approbation_automatique \
+            else "et a besoin d'une approbation"
         return f"{self.nom} - {deductions} {approval}"
+
 
 class Cycle(models.Model):
     MOIS_CHOICES = (
@@ -308,11 +325,12 @@ class Cycle(models.Model):
     def __str__(self):
         return f"Dure {self.duree} mois - Boucle tout les {self.mois_debut}"
 
+
 class Configuration(models.Model):
     # Paramètres du compteur d'absences
     nom = models.CharField(max_length=100,
                            null=True,
-                           blank=True)  
+                           blank=True)
     maximum_eligible_days = models.PositiveIntegerField(
         verbose_name="Nombre maximum de jours éligibles"
     )
@@ -351,19 +369,20 @@ class Configuration(models.Model):
     def __str__(self):
         return f"{self.nom}, {self.maximum_eligible_days} jours ouvrés - {self.nombre_jours_reportes} jours reportables"
 
+
 class Seniority(models.Model):
     # Ancienneté requise du collaborateur (en mois) entre 1 et 60
     seniority_required = models.IntegerField(
-        verbose_name=("Ancienneté requise du collaborateur (en mois)"),
-        help_text=("Veuillez entrer l'ancienneté requise du collaborateur en mois (entre 1 et 60)."),
+        verbose_name="Ancienneté requise du collaborateur (en mois)",
+        help_text="Veuillez entrer l'ancienneté requise du collaborateur en mois (entre 1 et 60).",
         validators=[MinValueValidator(1), MaxValueValidator(60)],
         unique=True
     )
 
     # Jours de congé supplémentaire
     extra_leave_days = models.IntegerField(
-        verbose_name=("Jours de congé supplémentaire"),
-        help_text=("Veuillez entrer le nombre de jours de congé supplémentaire."),
+        verbose_name="Jours de congé supplémentaire",
+        help_text="Veuillez entrer le nombre de jours de congé supplémentaire.",
         default=0
     )
 
@@ -374,8 +393,10 @@ class Seniority(models.Model):
     def __str__(self):
         return f"{self.seniority_required} mois - {self.extra_leave_days} jours supplémentaires"
 
+
 class ArchiveCollaborateur(Collaborateur):
     date_archivage = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name = "Archive Collaborateur"
         verbose_name_plural = "Archives Collaborateurs"

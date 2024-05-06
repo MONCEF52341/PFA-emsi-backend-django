@@ -43,13 +43,21 @@
                 {% if user.is_staff %}
                 <li><a href="{% url 'liste_collaborateurs' %}" class="{% if 'collaborateurs' in request.path %}active{% endif %}">Collaborateurs</a></li>
                 <li><a href="{% url 'admin:index' %}">Administration</a></li>
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'dashboard' %}">Dev view</a></li>
                 {% endif %}
             </ul>
         </div>
 
         <!-- Contenu variable de la page -->
         <div class="page-content">
+            <div class="navbarCollaborateurs">
+                <ul>
+                    <li><a href="{% url 'liste_collaborateurs' %}" class="{% if request.path == '/collaborateurs/' %}active{% endif %}">Collaborateurs</a></li>
+                    <li><a href="{% url 'equipes-list' %}" class="{% if 'equipes' in request.path %}active{% endif %}">Équipes</a></li>
+                    <li><a href="{% url 'emploi-list' %}" class="{% if 'emplois' in request.path %}active{% endif %}">Emplois</a></li>
+                    <li><a href="{% url 'organigramme' %}" class="{% if 'organigramme' in request.path %}active{% endif %}">Organigramme</a></li>
+                </ul>
+            </div>
             {% block content %}
             <!-- Contenu spécifique de chaque page -->
             {% endblock %}
