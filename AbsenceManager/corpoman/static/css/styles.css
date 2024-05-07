@@ -8,9 +8,12 @@ body {
 /* Barre de navigation */
 /* CSS pour la barre de navigation */
 .navbar {
-    width: 100%;
     background-color: #333;
     color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
 }
 
 /* Placer le nom de la plateforme à gauche */
@@ -35,6 +38,9 @@ body {
 .navbar .logout a {
     color: #fff;
     text-decoration: none;
+}
+.navbar .logout a :hover {
+    cursor: pointer;
 }
 
 /* Barre de navigation verticale */

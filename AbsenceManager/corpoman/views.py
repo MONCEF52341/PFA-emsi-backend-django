@@ -1,5 +1,6 @@
 import random
 
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -514,3 +515,18 @@ def calendar_Absences(request):
             'end': evenement.date_fin.strftime('%Y-%m-%d') if evenement.date_fin else "",
         })
     return JsonResponse(events_data, safe=False)
+
+@login_required
+def connexion_en_tant_que(request, pk):
+    # Assurez-vous que l'utilisateur actuel est un administrateur
+    if not request.user.is_staff:
+        return redirect('accueil')  # Rediriger vers la page d'accueil si l'utilisateur n'est pas un administrateur
+    
+    # Récupérer le collaborateur spécifié par son ID
+    collaborateur = get_object_or_404(Collaborateur, pk=pk)
+    
+    # Connecter l'utilisateur en tant que le collaborateur spécifié
+    login(request, collaborateur.user)
+    
+    # Rediriger vers une page de tableau de bord ou une autre vue appropriée
+    return redirect('accueil')

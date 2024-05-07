@@ -69,7 +69,8 @@ urlpatterns = [
     path('organigramme/', organization_chart, name='organigramme'),
     path('populate/', populate_database, name='populate'),
     path('evenements', calendar_Absences, name='evenements'),
-    path('purge/', vider, name='vider_archive_collaborateur')
+    path('purge/', vider, name='vider_archive_collaborateur'),
+    path('connexion-en-tant-que/<int:pk>/', connexion_en_tant_que, name='connexion_en_tant_que'),
 ]
 
 if settings.DEBUG:

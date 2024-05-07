@@ -40,7 +40,8 @@
                 <td>{{ collaborateur.lieu_travail }}</td>
                 <td>
                     <a href="{% url 'modifier_collaborateur' pk=collaborateur.pk %}">Détails</a>
-                    <a href="{% url 'supprimer_collaborateur' pk=collaborateur.pk %}">Cloturer le contrat</a>                    
+                    <a href="{% url 'supprimer_collaborateur' pk=collaborateur.pk %}">Cloturer le contrat</a>
+                    <a href="{% url 'connexion_en_tant_que' pk=collaborateur.pk %}">Se connecter en tant que {{ collaborateur.nom }}</a>             
                 </td>
             </tr>
             {% endfor %}
