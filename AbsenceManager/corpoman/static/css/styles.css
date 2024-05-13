@@ -1,11 +1,4 @@
-/* CSS pour le contenu de la page */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
 
-/* Barre de navigation */
 /* CSS pour la barre de navigation */
 .navbar {
     width: 100%;
@@ -13,12 +6,7 @@ body {
     color: #fff;
 }
 
-/* Placer le nom de la plateforme à gauche */
-.navbar .platform-name {
-    order: -1; /* Pour le placer au début */
-    margin-right: auto; /* Pour le pousser tout à gauche */
-    margin-left: 20px; /* Ajoutez un espacement après le logo */
-}
+
 
 
 .navbar .user-info {
@@ -38,29 +26,8 @@ body {
 }
 
 /* Barre de navigation verticale */
-.sidebar {
-    background-color: #f4f4f4;
-    width: 200px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 60px;
-    overflow-y: auto;
-}
 
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-}
 
-.sidebar ul li {
-    padding: 10px;
-}
-
-.sidebar ul li a {
-    color: #333;
-    text-decoration: none;
-}
 
 .sidebar ul li a.active {
     font-weight: bold;
@@ -71,6 +38,7 @@ body {
 .page-content {
     margin-left: 200px;
     padding: 20px;
+    
 }
 .accordion-section {
     width: calc(40% - 20px); /* Moins d'un quart de la taille de l'écran avec une marge entre les sections */

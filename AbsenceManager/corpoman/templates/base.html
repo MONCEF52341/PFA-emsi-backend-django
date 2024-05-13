@@ -8,14 +8,13 @@
     <title>{% block title %}Page de base{% endblock %}</title>
     <script src="{% static 'js/calendar.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Employe.css' %}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="icon" href="{% static 'img/logo.png' %}" type="image/x-icon">
 </head>
 <body>
-    <!-- Barre de navigation -->
-    <div class="navbar">
-        <div class="logo">
-            <!-- Insérez votre logo ici -->
-        </div>
+    <!-- 
+    
         <div class="platform-name">
             <img src="{% static 'img/platform.png' %}" alt="Corpoman" height="35">
         </div>        
@@ -27,29 +26,66 @@
                 {% csrf_token %}
                 <button type="submit">Déconnexion</button>
             </form>            
-        </div>
-    </div>
+        </div>   Barre de navigation -->
+ 
 
     <!-- Contenu de la page -->
-    <div class="content">
-        <!-- Barre de navigation verticale -->
-        <div class="sidebar">
-            <ul>
-                <li><a href="{% url 'accueil' %}" class="{% if request.path == '/home/' %}active{% endif %}">Accueil</a></li>
-                <li><a href="#" class="{% if 'tasks' in request.path %}active{% endif %}">Tâches</a></li>
-                <li><a href="{% url 'dayoff' %}" class="{% if 'dayoff' in request.path %}active{% endif %}">Absences et congés</a></li>
-                <li><a href="{% url 'dayoff' %}" class="{% if 'dayoff' in request.path %}active{% endif %}">Mes absences</a></li>
-                <li><a href="{% url 'mon_profil' %}" class="{% if 'profil' in request.path %}active{% endif %}">Mon profil</a></li>
-                {% if user.is_staff %}
-                <li><a href="{% url 'liste_collaborateurs' %}" class="{% if 'collaborateurs' in request.path %}active{% endif %}">Collaborateurs</a></li>
-                <li><a href="{% url 'admin:index' %}">Administration</a></li>
-                <li><a href="{% url 'dashboard' %}">Dev view</a></li>
-                {% endif %}
-            </ul>
+
+      
+        <div class="sidebar" style="width:220px; background-color: #d9d9d9;margin-top: 16px;">
+
+            <div class="platform-name">
+                <img src="{% static 'img/LogoApp.png' %}" alt="Corpoman" style="height: 58px;">
+            </div>  
+            <div>
+            <h1 id="title">Vous</h1>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/Acceuil.png' %}" alt="" height="25" width="25"style="margin-right: 5px;">
+                <a href="{% url 'accueil' %}"  >Accueil</a>
+            </div>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/MonProfil.png' %}" alt="" height="25" width="25" style="margin-right: 5px;">
+                <a href="{% url 'mon_profil' %}"  >Mon profil</a>
+            </div>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/Conge.png' %}" alt="" height="25" width="25" style="margin-right: 5px;">
+                <a href="{% url 'dayoff' %}"  >Congés et Absences</a>
+            </div>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/clipboard.png' %}" alt="" height="25" width="25" style="margin-right: 5px;">
+                <a href="#"  >Tâches</a>
+            </div>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/SuiviTemps.png' %}" alt="" height="25" width="25" style="margin-right: 5px;">
+                <a href="#">Suivi du temps</a>
+            </div>
         </div>
 
+        <div>
+            <h1 id="title" style="margin-top: 20px;">Votre entreprise</h1>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/Vector.png' %}" alt="" height="25" width="25"style="margin-right: 5px;">
+                <a href="#"  >Organigramme</a>
+            </div>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/calendrier.png' %}" alt="" height="25" width="25" style="margin-right: 5px;">
+                <a href="#"  >Calendrier</a>
+            </div>
+            <div class="SidebarItem">
+                <img  src="{% static 'img/sondage.png' %}" alt="" height="25" width="25" style="margin-right: 5px;">
+                <a href="#"  >Sondage</a>
+            </div>
+           
+        
+        </div>
+          </div>
+          
+
         <!-- Contenu variable de la page -->
-        <div class="page-content">
+
+       
+        <div class="page-content" style="margin-top: -538px;">
+            {% if user.is_superuser %}
             <div class="navbarCollaborateurs">
                 <ul>
                     <li><a href="{% url 'liste_collaborateurs' %}" class="{% if request.path == '/collaborateurs/' %}active{% endif %}">Collaborateurs</a></li>
@@ -58,11 +94,13 @@
                     <li><a href="{% url 'organigramme' %}" class="{% if 'organigramme' in request.path %}active{% endif %}">Organigramme</a></li>
                 </ul>
             </div>
+            {% endif %}
             {% block content %}
             <!-- Contenu spécifique de chaque page -->
             {% endblock %}
+         
         </div>
-    </div>
+        
     {% block extra_js %}
     <script>
         var acc = document.getElementsByClassName("accordion");

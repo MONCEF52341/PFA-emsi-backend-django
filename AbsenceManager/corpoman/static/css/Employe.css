@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color:#d9d9d9;
+
+}
+#title{
+    color: #989494;
+    font-size: 20px;
+    margin-left:20px;
+}
+
+.SidebarItem{
+    padding:18px;
+    margin-left: 10px;
+    
+}
+
+.SidebarItem:hover{
+    background-color: #2B2B49;
+    color:#ffffff;
+    border-radius: 10px;
+}
+
+.SidebarItem:hover img {
+    filter: invert(100%); 
+}
+
+a {
+    text-decoration: none; 
+}
