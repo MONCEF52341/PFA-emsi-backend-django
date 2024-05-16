@@ -1,39 +1,56 @@
 {% extends 'base.html' %}
 
 {% block title %}Tableau de bord{% endblock %}
-
+{% load static %}
 {% block content %}
-    <!-- Tâches -->
-    <div class="accordion-section">
-        <button class="accordion">Taches</button>
-            <div class="panel">
-                <p>Lorem ipsum...</p>
-            </div>
+
+
+<div style="display: flex;display: flex;gap: 120px;margin-left: 125px;margin-top: -55px;">
+    <div class="Container">
+    <p id="text">Vous avez pointé</p>
+    <hr>
+    <p id="temps">0h00m</p>
+    <div style="display: flex; gap: 24px; margin: 15px;">
+    <Button id="btn2">Pause</Button>
+    <Button id="btn1"> Pointer la sortie</Button>
+    </div>
     </div>
 
-    <!-- Équipes -->
-    <div class="accordion-section">
-        <button class="accordion">Equipes</button>
-        <div class="panel">
-            <p>Lorem ipsum...</p>
+    <div class="Container">
+        <p id="text">Prochaines Abscences</p>
+        <hr>
+    </div>
+
+
+    <div class="Container">
+            <p id="text">Tâches en attentes</p>
+            <hr>
+    </div>
+ </div>
+
+
+ <div style="display: flex;display: flex;gap: 120px;margin-left: 125px;    margin-top: 40px;">
+    <div class="Container">
+        <p id="text">Prochains évenements</p>
+        <hr>
+        <img id="calendarImg" src="{% static 'img/calendar.png' %}" alt="calendar">
+        <p id="month">Mai</p>
+        <p id="day">30</p>
+        <p id="event">10 e Anniversaire de l'entreprise</p>
         </div>
-    </div>
 
-    <!-- Absences dans votre équipe -->
-    <div class="accordion-section">
-        <button class="accordion">Absences dans votre équipe</button>
-            <div class="panel">
-                <p>Lorem ipsum...</p>
+    
+        <div class="Container">
+            <p id="text">Jours fériés à venir</p>
+            <hr>
+            </div>
+
+            <div class="Container">
+                <p id="text">Toutes les communautés</p>
+                <hr>
             </div>
     </div>
 
-    <!-- Jours fériés à venir -->
-    <div class="accordion-section">
-        <button class="accordion">Jours fériés à venir</button>
-            <div class="panel">
-                <p>Lorem ipsum...</p>
-            </div>
-    </div>
 {% endblock %}
 
 

@@ -9,6 +9,7 @@
     <script src="{% static 'js/calendar.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/Employe.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Acceuil.css' %}">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="icon" href="{% static 'img/logo.png' %}" type="image/x-icon">
 </head>
@@ -30,12 +31,27 @@
  
 
     <!-- Contenu de la page -->
-
       
-        <div class="sidebar" style="width:220px; background-color: #d9d9d9;margin-top: 16px;">
+        <div class="sidebar" style="width:220px; background-color: #F5F5F5;margin-top: 16px;">
 
-            <div class="platform-name">
-                <img src="{% static 'img/LogoApp.png' %}" alt="Corpoman" style="height: 58px;">
+            <div  style="display: flex; gap: 900px;">
+                <img src="{% static 'img/LogoApp.png' %}" alt="Absentia" style="height: 58px;">
+                <div class="btnGauche" style="display: flex; gap: 100px;">
+                    <button id="btn1"> Ajouter une abscence </button>
+                    <!--Pop Up formlaire-->
+                    <div id="myModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close"></span>
+                            <!-- Formulaire ici -->
+                            <form method="post">
+                              {% csrf_token %}
+                              {{ form.as_p }}
+                              <button type="submit">Soumettre</button>
+                            </form>
+                        </div>
+                    </div>
+                    <button id="btn2" type="submit" href="{% url 'logout' %}">Déconnexion </button>    
+                </div>
             </div>  
             <div>
             <h1 id="title">Vous</h1>
@@ -121,6 +137,37 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 } 
+
+var modal = document.getElementById("myModal");
+
+// Récupérer le bouton pour ouvrir la boîte modale
+var btn = document.getElementById("btn1");
+
+// Récupérer le span qui permet de fermer la boîte modale
+var span = document.getElementsByClassName("close")[0];
+
+var calendarEl = document.getElementById('calendrier');
+
+// Lorsque l'utilisateur clique sur le bouton, ouvrir la boîte modale
+btn.onclick = function() {
+    modal.style.display = "block";
+    calendrier.classList.add("hidden");
+}
+
+// Lorsque l'utilisateur clique sur <span> (x), fermer la boîte modale
+span.onclick = function() {
+    modal.style.display = "none";
+    calendrier.classList.remove("hidden");
+}
+
+// Lorsque l'utilisateur clique en dehors de la boîte modale, la fermer
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        calendrier.classList.remove("hidden");
+    }
+}
+
     </script>
 {% endblock %}
 </body>

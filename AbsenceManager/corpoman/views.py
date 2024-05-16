@@ -169,7 +169,8 @@ def dashboard(request):
 
 @login_required
 def accueil(request):
-    return render(request, 'home.html')
+    form = create_demande_absence(request)
+    return render(request, 'home.html',{'form': form})
 
 
 def get_pris(employe):
