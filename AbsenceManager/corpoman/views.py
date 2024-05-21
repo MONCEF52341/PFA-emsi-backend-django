@@ -196,6 +196,7 @@ def create_demande_absence(request):
         form = DemandeAbsenceForm(request.POST)
         if form.is_valid():
             form.instance.employe = request.user.collaborateur
+            form.initial.situation = "StandBy"
             form.save()
             return redirect(request.path)
     else:

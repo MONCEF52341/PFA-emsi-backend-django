@@ -52,14 +52,21 @@ class Collaborateur(models.Model):
 
 
 class DemandeAbsence(models.Model):
+
+    SITUATION_CHOICES = (
+        ('Approuved', 'Approuvée'),
+        ('StandBy', 'En attente'),
+        ('Refused', 'Refusé')
+    )
     employe = models.ForeignKey('Collaborateur', on_delete=models.CASCADE, verbose_name="Employé")
     approbateur = models.ForeignKey('Collaborateur', on_delete=models.SET_NULL, null=True, blank=True,
                                     related_name="approbateur", verbose_name="Approbateur")
     type_absence = models.ForeignKey('TypeAbsence', on_delete=models.CASCADE, verbose_name="Type d'absence")
-    description = models.TextField(verbose_name="Description")
+    description = models.TextField(verbose_name="Description",null=True, blank=True)
     date_debut = models.DateField(verbose_name="Date début")
     date_fin = models.DateField(null=True, blank=True, verbose_name="Date fin")
     documents = models.FileField(upload_to="documents_joints", verbose_name="Documents joints", null=True, blank=True)
+    situation = models.CharField(max_length=20, choices=SITUATION_CHOICES, verbose_name="Situation")
 
     class Meta:
         verbose_name = "Demande d'absence"
