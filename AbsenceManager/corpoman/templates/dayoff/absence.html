@@ -51,7 +51,14 @@
         </thead>
         <tbody>
             {% for demande in demandes_absence %}
-            <tr>
+            <tr class="
+            {% if demande.situation == 'Refused' %}
+                refused
+            {% elif demande.situation == 'Approved' %}
+                approved
+            {% elif demande.situation == 'StandBy' %}
+                standby
+            {% endif %}">
                 <td>{{ demande.type_absence.nom }}</td>
                 <td>{{ demande.date_debut }}</td>
                 {% if demande.date_fin %}

@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.utils import timezone
+from django.db.models import Count
 from faker import Faker
 from rest_framework import generics
 
@@ -169,7 +170,14 @@ def dashboard(request):
 
 @login_required
 def accueil(request):
-    return render(request, 'home.html')
+    equipe = request.user.collaborateur.Equipe
+    absences_standby = DemandeAbsence.objects.filter(
+        employe__Equipe=equipe).exclude(
+        employe=request.user.collaborateur).filter(
+        employe__manager=request.user.collaborateur,situation='StandBy')
+
+    absences_standby_count = absences_standby.count();
+    return render(request, 'home.html',{'absences_standby_count': absences_standby_count,'absences_standby': absences_standby})
 
 
 def get_pris(employe):
@@ -196,9 +204,9 @@ def create_demande_absence(request):
         form = DemandeAbsenceForm(request.POST)
         if form.is_valid():
             form.instance.employe = request.user.collaborateur
-            form.initial.situation = "StandBy"
+            form.instance.situation = 'StandBy'
             form.save()
-            return redirect(request.path)
+            return redirect('dayoff')
     else:
         form = DemandeAbsenceForm()
     return form
@@ -515,3 +523,35 @@ def calendar_Absences(request):
             'end': evenement.date_fin.strftime('%Y-%m-%d') if evenement.date_fin else "",
         })
     return JsonResponse(events_data, safe=False)
+
+
+def changer_situation_absence(request, pk, situation):
+    absence = get_object_or_404(DemandeAbsence, pk=pk)
+    if situation in ['Approved', 'Refused']:
+        absence.situation = situation
+        absence.save()
+    return redirect('accueil')
+
+
+def graphic(request):
+    absences_par_type = DemandeAbsence.objects.values('type_absence__nom').annotate(total=Count('id'))
+    collaborateurs_par_equipe = Collaborateur.objects.values('equipe__nom').annotate(total=Count('id'))
+
+    context = {
+        'absences_par_type': absences_par_type,
+        'collaborateurs_par_equipe': collaborateurs_par_equipe,
+    }
+
+    return render(request, 'graphiques.html', context)
+
+def absmanagement(request):
+    equipe = request.user.collaborateur.Equipe
+
+    # Filtrer les demandes d'absence des membres de l'équipe
+    absences_equipe = DemandeAbsence.objects.filter(employe__Equipe=equipe).exclude(employe=request.user.collaborateur)
+    return render(request, 'gestionabs.html',{'absences_equipe': absences_equipe})
+
+
+def myabs(request):
+    demande = DemandeAbsence.objects.filter(employe=request.user.collaborateur)
+    return render(request,'myabs.html',{'demande': demande})

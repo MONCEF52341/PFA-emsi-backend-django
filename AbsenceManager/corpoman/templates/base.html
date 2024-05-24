@@ -29,7 +29,8 @@
             </form>            
         </div>
     </div>
-
+<br>
+<br>
     <!-- Contenu de la page -->
     <div class="content">
         <!-- Barre de navigation verticale -->
@@ -37,10 +38,11 @@
             <ul>
                 <li><a href="{% url 'accueil' %}" class="{% if request.path == '/home/' %}active{% endif %}">Accueil</a></li>
                 <li><a href="#" class="{% if 'tasks' in request.path %}active{% endif %}">Tâches</a></li>
+                <li><a href="{% url 'myabs' %}" class="{% if 'myabs' in request.path %}active{% endif %}">Mes absences</a></li>
                 <li><a href="{% url 'dayoff' %}" class="{% if 'dayoff' in request.path %}active{% endif %}">Absences et congés</a></li>
-                <li><a href="{% url 'dayoff' %}" class="{% if 'dayoff' in request.path %}active{% endif %}">Mes absences</a></li>
                 <li><a href="{% url 'mon_profil' %}" class="{% if 'profil' in request.path %}active{% endif %}">Mon profil</a></li>
                 {% if user.is_staff %}
+                <li><a href="{% url 'absmanagement' %}" class="{% if 'absmanagement' in request.path %}active{% endif %}">Demandes d'absence</a></li>
                 <li><a href="{% url 'liste_collaborateurs' %}" class="{% if 'collaborateurs' in request.path %}active{% endif %}">Collaborateurs</a></li>
                 <li><a href="{% url 'admin:index' %}">Administration</a></li>
                 <li><a href="{% url 'dashboard' %}">Dev view</a></li>

@@ -1,0 +1,33 @@
+<!-- templates/myabs.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="heading">Mes Absences</h1>
+    {% if demande %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Type d'absence</th>
+                    <th>Du</th>
+                    <th>Au</th>
+                    <th>Situation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for abs in demande %}
+                    <tr>
+                        <td>{{ abs.type_absence.nom }}</td>
+                        <td>{{ abs.date_debut }}</td>
+                        <td>{% if abs.date_fin %}{{ abs.date_fin }}{% else %}N/A{% endif %}</td>
+                        <td>{{ abs.situation }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-data">Vous n'avez aucune demande d'absence.</p>
+    {% endif %}
+</div>
+{% endblock %}

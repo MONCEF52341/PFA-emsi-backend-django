@@ -54,7 +54,7 @@ class Collaborateur(models.Model):
 class DemandeAbsence(models.Model):
 
     SITUATION_CHOICES = (
-        ('Approuved', 'Approuvée'),
+        ('Approved', 'Approuvée'),
         ('StandBy', 'En attente'),
         ('Refused', 'Refusé')
     )

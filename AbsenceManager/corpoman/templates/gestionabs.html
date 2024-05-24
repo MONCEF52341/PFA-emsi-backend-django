@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Absences de l'Équipe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="heading">Absences de l'Équipe</h1>
+    {% if absences_equipe %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Collaborateur</th>
+                    <th>Type d'absence</th>
+                    <th>Du</th>
+                    <th>Au</th>
+                    <th>Situation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for absence in absences_equipe %}
+                    <tr>
+                        <td>{{ absence.employe.nom }} {{ absence.employe.prenom }}</td>
+                        <td>{{ absence.type_absence.nom }}</td>
+                        <td>{{ absence.date_debut }}</td>
+                        <td>{% if absence.date_fin %}{{ absence.date_fin }}{% else %}N/A{% endif %}</td>
+                        <td>{{ absence.situation }}</td>
+                        <td>
+                            {% if absence.situation == 'StandBy' %}
+                            <div class="button-container">
+                                <form method="post" action="{% url 'changer_situation_absence' absence.id 'Approved' %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Valider</button>
+                                </form>
+                                <form method="post" action="{% url 'changer_situation_absence' absence.id 'Refused' %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Refuser</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-data">Aucune absence à afficher pour l'équipe.</p>
+    {% endif %}
+</div>
+{% endblock %}

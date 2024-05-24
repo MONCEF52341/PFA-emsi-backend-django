@@ -11,6 +11,12 @@ body {
     width: 100%;
     background-color: #333;
     color: #fff;
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    
 }
 
 /* Placer le nom de la plateforme à gauche */
@@ -32,9 +38,10 @@ body {
     margin-right: 5px;
 }
 
-.navbar .logout a {
+.navbar .logout {
     color: #fff;
     text-decoration: none;
+    padding: 10px;
 }
 
 /* Barre de navigation verticale */
@@ -304,4 +311,92 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* Opacité de 50% */
     z-index: 999; /* Assure que l'arrière-plan est en dessous du pop-up */
+}
+
+.refused {
+    background-color: red;
+}
+
+.approved {
+    background-color: green;
+}
+
+.standby {
+    background-color: yellow;
+}
+
+.absence-info {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.absence-info p {
+    margin: 5px 0;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* espace entre les boutons */
+}
+
+.button-container form {
+    margin: 0;
+}
+
+.notification-icon {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+/* static/css/style.css */
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.no-data {
+    text-align: center;
+    color: #888;
 }

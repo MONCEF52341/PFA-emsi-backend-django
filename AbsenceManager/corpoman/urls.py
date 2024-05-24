@@ -63,12 +63,15 @@ urlpatterns = [
     path('supprimer-emploi/<int:pk>/', supprimer_emploi, name='supprimer_emploi'),
 
     path('dayoff/', dayoff, name='dayoff'),
+    path('changer_situation_absence/<int:pk>/<str:situation>/', changer_situation_absence, name='changer_situation_absence'),
 
     path('appliquer-politique-absences/', appliquer_politique_absences, name='appliquer_politique_absences'),
     path('mon-profil/', mon_profil, name='mon_profil'),
     path('organigramme/', organization_chart, name='organigramme'),
     path('populate/', populate_database, name='populate'),
     path('evenements', calendar_Absences, name='evenements'),
+    path('absmanagement/', absmanagement, name='absmanagement'),
+    path('myabs', myabs, name='myabs'),
     path('purge/', vider, name='vider_archive_collaborateur')
 ]
 

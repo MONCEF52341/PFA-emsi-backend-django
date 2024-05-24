@@ -21,10 +21,29 @@
 
     <!-- Absences dans votre équipe -->
     <div class="accordion-section">
-        <button class="accordion">Absences dans votre équipe</button>
-            <div class="panel">
-                <p>Lorem ipsum...</p>
-            </div>
+        <button class="accordion">Absences dans votre équipe
+            {% if absences_standby_count > 0 %}
+                <span class="notification-icon">{{ absences_standby_count }}</span>
+            {% endif %}
+        </button>
+        <div class="panel">
+            {% for abs in absences_standby %}
+                <div class="absence-info">
+                    <p><strong>{{ abs.employe.nom }} {{ abs.employe.prenom }} :</strong> {{ abs.type_absence.nom }}</p>
+                    <p>Du {{ abs.date_debut }} {% if abs.date_fin %} au {{ abs.date_fin }}{% endif %}</p>
+                    <div class="button-container">
+                        <form method="post" action="{% url 'changer_situation_absence' abs.id 'Approved' %}">
+                            {% csrf_token %}
+                            <button type="submit">Valider</button>
+                        </form>
+                        <form method="post" action="{% url 'changer_situation_absence' abs.id 'Refused' %}">
+                            {% csrf_token %}
+                            <button type="submit">Refuser</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
     <!-- Jours fériés à venir -->
