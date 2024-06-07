@@ -27,6 +27,11 @@
             {% endif %}
         </button>
         <div class="panel">
+            {% if absences_standby_count == 0 %}
+                <div class="absence-info">
+                    <b>Aucune absence dans votre équipe</b>
+                </div>
+            {% endif %}
             {% for abs in absences_standby %}
                 <div class="absence-info">
                     <p><strong>{{ abs.employe.nom }} {{ abs.employe.prenom }} :</strong> {{ abs.type_absence.nom }}</p>
@@ -34,11 +39,11 @@
                     <div class="button-container">
                         <form method="post" action="{% url 'changer_situation_absence' abs.id 'Approved' %}">
                             {% csrf_token %}
-                            <button type="submit">Valider</button>
+                            <button type="submit" class="yes">Valider</button>
                         </form>
                         <form method="post" action="{% url 'changer_situation_absence' abs.id 'Refused' %}">
                             {% csrf_token %}
-                            <button type="submit">Refuser</button>
+                            <button type="submit" class="no">Refuser</button>
                         </form>
                     </div>
                 </div>

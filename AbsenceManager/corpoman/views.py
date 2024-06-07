@@ -214,6 +214,19 @@ def create_demande_absence(request):
 
 @login_required
 def dayoff(request):
+    """
+    Cette fonction gère les demandes de congés pour un employé connecté.
+
+    Elle calcule le nombre de jours de congés pris, le nombre de jours de congés acquis
+    et le solde restant. Elle récupère également toutes les demandes de congés existantes
+    et fournit un formulaire pour en créer de nouvelles.
+
+    Args:
+        Une requete HTTP.
+
+    Returns:
+        Une requete HTTP,La page html,et les arguments
+    """
     employe = request.user.collaborateur
     pris = get_pris(employe)
     acquis = get_acquis(employe)
@@ -222,6 +235,7 @@ def dayoff(request):
     form = create_demande_absence(request)
     return render(request, 'dayoff/absence.html',
                   {'form': form, 'pris': pris, 'acquis': acquis, 'solde': solde, 'demandes_absence': demandes_absence})
+
 
 
 @user_passes_test(lambda u: u.is_superuser)

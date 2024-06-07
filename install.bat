@@ -1,7 +1,6 @@
 @echo off
 REM Vérifier si le répertoire de l'environnement virtuel existe
 if not exist .env\Scripts\activate.bat (
-    REM Créer un environnement virtuel Python
     python -m venv .env
 )
 

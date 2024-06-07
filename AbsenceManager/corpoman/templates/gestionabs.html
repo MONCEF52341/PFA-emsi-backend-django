@@ -30,11 +30,11 @@
                             <div class="button-container">
                                 <form method="post" action="{% url 'changer_situation_absence' absence.id 'Approved' %}">
                                     {% csrf_token %}
-                                    <button type="submit">Valider</button>
+                                    <button type="submit" class="yes">Valider</button>
                                 </form>
                                 <form method="post" action="{% url 'changer_situation_absence' absence.id 'Refused' %}">
                                     {% csrf_token %}
-                                    <button type="submit">Refuser</button>
+                                    <button type="submit" class="no">Refuser</button>
                                 </form>
                             </div>
                             {% endif %}

@@ -92,8 +92,8 @@ DATABASES = {
 #         'NAME': 'corpoman_db',
 #         'USER': 'postgres',
 #         'PASSWORD': '52341',
-#         'HOST': 'localhost',  # Ou l'adresse IP de votre serveur PostgreSQL
-#         'PORT': '5432',  # Le port par défaut de PostgreSQL
+#         'HOST': 'localhost',
+#         'PORT': '5432',
 #     }
 # }
 

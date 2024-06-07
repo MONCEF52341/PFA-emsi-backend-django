@@ -1,7 +1,6 @@
 <!-- templates/myabs.html -->
 
 {% extends "base.html" %}
-
 {% block content %}
 <div class="container">
     <h1 class="heading">Mes Absences</h1>
@@ -17,12 +16,12 @@
             </thead>
             <tbody>
                 {% for abs in demande %}
-                    <tr>
-                        <td>{{ abs.type_absence.nom }}</td>
-                        <td>{{ abs.date_debut }}</td>
-                        <td>{% if abs.date_fin %}{{ abs.date_fin }}{% else %}N/A{% endif %}</td>
-                        <td>{{ abs.situation }}</td>
-                    </tr>
+                <tr class="{% if abs.situation == 'Approuved' %}approved{% elif abs.situation == 'StandBy' %}pending{% elif abs.situation == 'Refused' %}rejected{% endif %}">
+                    <td>{{ abs.type_absence.nom }}</td>
+                    <td>{{ abs.date_debut }}</td>
+                    <td>{% if abs.date_fin %}{{ abs.date_fin }}{% else %}N/A{% endif %}</td>
+                    <td>{{ abs.situation }}</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
